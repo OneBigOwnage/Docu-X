@@ -1,10 +1,5 @@
 <?php
-
- $PHP_SCRIPT_ROOT = $_SERVER['DOCUMENT_ROOT'].'/_PHP/';
-
- set_include_path($PHP_SCRIPT_ROOT);
-
-
-
-
+ // The purpose of this file is to have all constants of
+ // the application in one file. So this is the only file that
+ // needs to be imported.
  ?>

@@ -4,10 +4,6 @@
   $page_title = "This is the title of the page...";
   ?>
 <?php include_once 'page_header.php';?>
-Hello World!<br>
-This is the index page.<br>
-----<br>
-<?php
-  LogManager::QLog(@true);
-  ?>
+This is the index page.</br>
+Welcome
 <?php include_once 'page_footer.php';?>

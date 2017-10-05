@@ -6,8 +6,8 @@
   define('DATABASE_NAME',     'docu-x');
 
   //Location of CSS & JS import directory.
-  define('CSS_LOC', SERVER_ROOT.'/../_CSS/');
-  define('JS_LOC', SERVER_ROOT.'/../_JS/');
+  define('CSS_LOC', '/css/');
+  define('JS_LOC', '/js/');
 
   //LogManager
   define('ERROR_LOG_TABLE', 'fwk_event_log');

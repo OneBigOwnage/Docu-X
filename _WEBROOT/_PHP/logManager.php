@@ -17,6 +17,7 @@
         return false;
     }
 
+
     // A saveEvent call with predefined values + text;
     public static function Qlog($message, $origin = E_ORIG_PHP)
     {
@@ -33,23 +34,25 @@
         case E_NOTICE: $eType = E_TYPE_NOTICE; break;
         default: E_UNDEFINED; break;
       }
-        return E_UNDEFINED;
+        return $eType;
     }
 
     //Save the event to the database.
     private static function saveEvent($message, $type, $origin)
     {
-        global $Database;
         if (!Database::hasConnection()) {
           self::backupHandler($message, $type, $origin);
           return false;
         }
 
-        $result = $Database->query("INSERT INTO ".ERROR_LOG_TABLE." (message, type, origin) VALUES (\"$message\", \"$type\", \"$origin\");");
-        if (!$result) {
-            echo "Currently not able to write event to database!</br>";
-        } else {
-            return false;
+        $insertData = array("message"   => $message,
+                            "type"      => $type,
+                            "origin"    => $origin);
+
+        $res = Database::Insert(ERROR_LOG_TABLE, $insertData);
+
+        if (!$res) {
+          self::backupHandler($message, $type, $origin);
         }
     }
 

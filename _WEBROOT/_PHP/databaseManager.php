@@ -12,59 +12,127 @@
           }
       }
 
-      private static function execQuery($queryString)
+      public static function execQuery($queryString)
       {
           if (!self::hasConnection()) {
               return false;
           }
-          return $this->conn->query($conn->real_escape_string($queryString));
-      }
 
-      public static function initConnection($host = DATABASE_HOST, $name = DATABASE_USERNAME, $pass = DATABASE_PASSWORD, $db = DATABASE_NAME)
-      {
-          self::$conn = new mysqli($host, $name, $pass, $db);
-          if ($this->connection->connect_errno) {
-              unset($conn);
+          $res = self::$conn->query($queryString);
+          if (!$res) {
+              self::onError("Query error:\n$queryString\n$res.");
               return false;
           } else {
               return true;
           }
       }
 
-      public function simpleSelect($table, $collumns = '*')
+      public static function initConnection($host = DATABASE_HOST, $name = DATABASE_USERNAME, $pass = DATABASE_PASSWORD, $db = DATABASE_NAME)
       {
+          self::$conn = new mysqli($host, $name, $pass, $db);
+          if (self::$conn->connect_errno) {
+              //TODO: Write error.
+              return false;
+          } else {
+              return true;
+          }
       }
 
-      public function enhancedSelect($query)
-      {
-      }
-
-      public function Insert($table, $data)
+      public function simpleSelect($table, $collumns = '*', $whereClause)
       {
 
       }
 
-      public function Update($table, $whereClause, $fields, $values)
+      public static function Insert($table, $data)
       {
+          if ($table == null || $data == null) {
+              return false;
+          }
+
+          $statement = "INSERT INTO $table (";
+          $statementVals = NULL;
+
+          foreach ($data as $colName => $val) {
+              $statement .= self::sanitize($colName) . ", ";
+              $statementVals .= "'" . self::sanitize($val) . "', ";
+          }
+
+          $statement = substr($statement, 0, strlen($statement) - 2) . ") VALUES (" . substr($statementVals, 0, strlen($statementVals) - 2) . ");";
+          return self::execQuery($statement);
       }
 
-      public function Delete($table, $soft = true)
+
+      public static function Update($table, $data, $whereClause)
       {
+          if ($table == null || $data == null) {
+              return false;
+          }
+
+          $statement = "UPDATE $table SET ";
+          foreach ($data as $colName => $val) {
+              $statement .= self::sanitize($colName) . " = '" . self::sanitize($val) . "', ";
+          }
+
+          $statement = substr($statement, 0, strlen($statement) - 2) . " WHERE ";
+
+          if (is_array($whereClause)) {
+              foreach ($whereClause as $colName => $val) {
+                  $statement .= self::sanitize($colName) . " = '" . self::sanitize($val) . "' AND ";
+              }
+
+              $statement = substr($statement, 0, strlen($statement) - 5) . ";";
+          } else {
+              $statement = substr($statement, 0, strlen($statement) - 7) . ";";
+          }
+
+          return self::execQuery($statement);
       }
 
-      public function RAWSQL($query)
+      public static function Delete($table, $whereClause, $soft = true)
       {
+        $statement;
+
+        if ($soft) {
+          $statement = "UPDATE $table SET d_dt = NOW() WHERE ";
+
+          if (is_array($whereClause)) {
+
+          } else {
+            $statement = substr($statement, 0, strlen($statement) - 7) . ";";
+          }
+        } else {
+          $statement = "DELETE FROM $table WHERE ";
+
+          if (is_array($whereClause)) {
+            foreach ($whereClause as $colName => $val) {
+              $statement .= self::sanitize($colName) . " = '" . self::sanitize($val) . "' AND ";
+            }
+          } else {
+            $statement = substr($statement, 0, strlen($statement) - 7) . ";";
+          }
+          $statement = substr($statement, 0, strlen($statement) - 5);
+        }
+
+        return self::execQuery($statement);
       }
 
-      private function onError($message)
+      public static function RAWSQL($query)
       {
-          //If there is no valid database-connection,
+
+      }
+
+      private static function onError($message)
+      {
+          echo $message;
+        //If there is no valid database-connection,
         //this should be handled via the backupHandler.
         if (!self::hasConnection()) {
             LogManager::backupHandler($message);
         } else {
+            //TODO: Write error to log.
         }
       }
+
 
       /**
        * Turns any query result into an associative array,
@@ -73,10 +141,10 @@
        *
        * @param {mysqli-queryresult} $result The result of a query.
        */
-      public static function resultToArray($queryResult)
+      public static function resToArray($queryResult)
       {
-          if ($queryResult == NULL || !$queryResult || $queryResult->num_rows <= 0) {
-            //TODO: Generate eMsg in log;
+          if ($queryResult == null || !$queryResult || $queryResult->num_rows <= 0) {
+              //TODO: Generate eMsg in log;
             return false;
           }
 
@@ -86,6 +154,20 @@
           }
           return $data;
       }
-  }
 
- ?>
+
+      /**
+       * Escapes all dangerous characters in a given variable.
+       * @method sanitize
+       * @param  any      $var Variable to sanitize.
+       * @return [type]        Returns false if no connection,
+       *                       otherwise returns sanitized variable.
+       */
+      public static function sanitize($var)
+      {
+          if (!self::hasConnection()) {
+              return false;
+          }
+          return self::$conn->real_escape_string($var);
+      }
+  }

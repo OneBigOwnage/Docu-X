@@ -2,6 +2,9 @@
   abstract class Database
   {
       private static $conn;
+      //TODO: Expand following list.
+      private static $allowedOperators = ['=', '<=', '>=', '<', '>', '<>', 'LIKE', 'NOT LIKE'];
+
 
       public static function hasConnection()
       {
@@ -12,7 +15,8 @@
           }
       }
 
-      public static function execQuery($queryString)
+
+      private static function execQuery($queryString)
       {
           if (!self::hasConnection()) {
               return false;
@@ -27,6 +31,7 @@
           }
       }
 
+
       public static function initConnection($host = DATABASE_HOST, $name = DATABASE_USERNAME, $pass = DATABASE_PASSWORD, $db = DATABASE_NAME)
       {
           self::$conn = new mysqli($host, $name, $pass, $db);
@@ -38,10 +43,25 @@
           }
       }
 
-      public function simpleSelect($table, $collumns = '*', $whereClause)
-      {
 
+      public function simpleSelect($table, $collumns = '*', $where)
+      {
+        if (empty($table)) {
+          return false;
+        }
+        $statement = "SELECT ";
+
+        foreach ($collumns as $col) {
+          $statement .= self::sanitize($col) . ", ";
+        }
+        $statement = substr($statement, 0 , strlen($statement) - 2);
+        $statement .= " FROM " . self::sanitize($table);
+
+        if (!self::whereSolver($where)) {
+          $statement .= $where . ";";
+        }
       }
+
 
       public static function Insert($table, $data)
       {
@@ -62,9 +82,9 @@
       }
 
 
-      public static function Update($table, $data, $whereClause)
+      public static function Update($table, $data, $where)
       {
-          if ($table == null || $data == null) {
+          if (empty($table) || empty($data)) {
               return false;
           }
 
@@ -74,19 +94,16 @@
           }
 
           $statement = substr($statement, 0, strlen($statement) - 2) . " WHERE ";
-
-          if (is_array($whereClause)) {
-              foreach ($whereClause as $colName => $val) {
-                  $statement .= self::sanitize($colName) . " = '" . self::sanitize($val) . "' AND ";
-              }
-
-              $statement = substr($statement, 0, strlen($statement) - 5) . ";";
+          //TODO: Make this into oneliner $statement .=  self::whereSolver($where) . ";";
+          if (!self::whereSolver($where)) {
+            $statement .= $where . ";";
           } else {
-              $statement = substr($statement, 0, strlen($statement) - 7) . ";";
+            $statement .= ";";
           }
 
           return self::execQuery($statement);
       }
+
 
       public static function Delete($table, $whereClause, $soft = true)
       {
@@ -116,10 +133,6 @@
         return self::execQuery($statement);
       }
 
-      public static function RAWSQL($query)
-      {
-
-      }
 
       private static function onError($message)
       {
@@ -130,6 +143,23 @@
             LogManager::backupHandler($message);
         } else {
             //TODO: Write error to log.
+        }
+      }
+
+
+      public static function whereSolver($where)
+      {
+        $whereString = " WHERE ";
+        foreach ($where as $arr) {
+          //TODO Split between numerals and strings.
+          if (!empty($arr[0]) && !empty($arr[1]) && !empty($arr[2]) && in_array($arr[1], self::$allowedOperators)) {
+            $whereString .= self::sanitize($arr[0]) . " {$arr[1]} '" . self::sanitize($arr[2]) . "' AND ";
+          }
+        }
+        if (strlen($whereString) <= 7) {
+          return false;
+        } else {
+          return substr($whereString, 0, strlen($whereString) - 5) . ";";
         }
       }
 

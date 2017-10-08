@@ -2,8 +2,3 @@ RewriteEngine On
 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^([^\.]+)$ $1.php [NC,L]
-
-
-# Redirect all CSS/JS URLs to the correct location.
-#RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^redirTest.js C:\WWW\_WebRoot\_JS\redirTest.js [NC,L]

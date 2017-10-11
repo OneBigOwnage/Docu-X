@@ -1,0 +1,27 @@
+@font-face {
+  font-family: "Ubuntu-Regular";
+  src: url(../fonts/Ubuntu-Regular.ttf);
+}
+
+*:not(.glyphicon):not(.fa) {
+  font-family: Ubuntu-Regular;
+}
+
+body {
+  background-color: #DFDFD0;
+}
+
+.h-center-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.m-bot-05 {
+  margin-bottom: 0.5cm;
+}
+
+.p-top-1 {
+  padding-top: 1cm;
+
+}

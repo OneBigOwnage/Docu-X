@@ -3,7 +3,7 @@
   $page_name = "EVENT_LOG";
   $page_title = "Application Event Log";
 
-  inclCSS(CSS_LOC.'EventLog.css');
+  Utils::inclCSS('EventLog.css');
   ?>
 <?php include_once 'page_header.php';?>
 
@@ -14,16 +14,14 @@
       <tr>
         <th class="col-xs-1">Time</th>
         <th class="col-xs-9">Message</th>
-        <th class="col-xs-2">Type & Origin</th>
+        <th class="col-xs-2">Origin & Type</th>
       </tr>
       <tbody>
         <?php
-          $query = "SELECT c_dt, message, type, origin FROM ".ERROR_LOG_TABLE." WHERE d_dt IS NULL ORDER BY c_dt DESC LIMIT 100;";
-          $ds = DatabaseHelper::resultToArray($Database->query($query));
+          $ds = Database::enhancedSelect("SELECT c_dt, message, type, origin FROM " . ERROR_LOG_TABLE . " WHERE d_dt IS NULL ORDER BY c_dt DESC;");
           foreach ($ds as $row) {
             echo "<tr><td>".$row['c_dt']."</td><td>".str_replace(array("\r\n", "\n", "\r"), " ", $row['message'])."</td><td>".$row['origin']." - ".$row['type']."</td></tr>";
           }
-
          ?>
       </tbody>
     </thead>

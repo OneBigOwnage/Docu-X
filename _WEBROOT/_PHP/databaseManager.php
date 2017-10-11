@@ -3,7 +3,7 @@
   {
       private static $conn;
       //TODO: Expand following list.
-      private static $allowedOperators = ['=', '<=', '>=', '<', '>', '<>', 'LIKE', 'NOT LIKE'];
+      private static $allowedOperators = ['=', '!=', '<=', '>=', '<', '>', '<>', 'LIKE', 'NOT LIKE'];
 
 
       public static function hasConnection()
@@ -24,10 +24,10 @@
 
           $res = self::$conn->query($queryString);
           if (!$res) {
-              self::onError("Query error:\n$queryString\n$res.");
+              self::onError("Query execution error:\n$queryString\n$res.");
               return false;
           } else {
-              return true;
+              return $res;
           }
       }
 
@@ -43,8 +43,7 @@
           }
       }
 
-
-      public function simpleSelect($table, $collumns = '*', $where)
+      public static function simpleSelect($table, $where, $collumns = '*')
       {
         if (empty($table)) {
           return false;
@@ -60,6 +59,8 @@
         if (!self::whereSolver($where)) {
           $statement .= $where . ";";
         }
+
+        return self::execQuery($statement);
       }
 
 
@@ -110,15 +111,9 @@
         $statement;
 
         if ($soft) {
-          $statement = "UPDATE $table SET d_dt = NOW() WHERE ";
-
-          if (is_array($whereClause)) {
-
-          } else {
-            $statement = substr($statement, 0, strlen($statement) - 7) . ";";
-          }
+          $statement = "UPDATE $table SET d_dt = NOW()" . self::whereSolver($where) . ";";
         } else {
-          $statement = "DELETE FROM $table WHERE ";
+          $statement = "DELETE FROM $table" . self::whereSolver($where) . ";";
 
           if (is_array($whereClause)) {
             foreach ($whereClause as $colName => $val) {
@@ -131,6 +126,16 @@
         }
 
         return self::execQuery($statement);
+      }
+
+
+      public static function enhancedSelect($query)
+      {
+        if (strpos(strtoupper(ltrim($query)), 'SELECT') === 0) {
+          return self::execQuery($query);
+        } else {
+          return false;
+        }
       }
 
 

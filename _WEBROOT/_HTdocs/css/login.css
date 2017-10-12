@@ -4,77 +4,25 @@ html {
     background-repeat: no-repeat;
 }
 
+
 body {
-  background: linear-gradient(to top right, #434442, #434442, #434442, #F15025);
-}
-
-.login-form {
-  height: 100%;
-
-  padding: 22px;
-
-  background-color: #434442;
-  /*background-color: rgba(241, 80, 37, 0.12);*/
-  border-style: solid;
-  border-radius: 1px;
-  border-width: 3px;
-  border-color: #F15025;
-
-  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
-          box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
-}
-
-@media (min-height: 800px) {
-  .login-form {
-    margin-top: 3cm;
-    height: 60vh;
-  }
-}
-
-.login-tab-headers,
-.login-tab-headers > a,
-.nav-tabs > .login-tab-headers > a {
-  color: #F15025;
-  font-size: 33px;
-  background-color: transparent;
-  /*box-shadow: inset 0 -30px -30px -30px #F15025;*/
-  border-style: hidden;
-  border-bottom-style: solid;
-  border-width: thin;
-  border-color: #F15025;
-  border-radius: 0px;
+  background: linear-gradient(to bottom right, #23395B, #23395B, #243E66);
 }
 
 
-/*TODO*/
-.nav-tabs > .login-tab-headers.active > a {
-  color: #F15025;
-  font-size: 33px;
-  background-color: rgba(255, 255, 255, 0.2);
-  border-style: hidden;
-  border-bottom-style: solid;
-  border-width: thin;
-  border-color: #F15025;
-  border-radius: 0px;
+#log-in-form,
+#sign-up-form {
+  height: 435px;
+  width: 385px;
+  background-color: rgba(0, 0, 0, 0.13);
 }
 
-.nav-tabs > li.active.login-tab-headers > a:hover,
-.nav-tabs > li.login-tab-headers > a:hover {
-  background-color: black;
+
+#log-in-form.login-form {
+  padding: 11px 11px 11px 11px;
 }
-/*TODO*/
 
-
-
-.login-input > input,
-.login-input > span {
-  background-color: transparent;
-  border-style: hidden;
-  border-radius: 0px;
-  border-bottom-style: solid;
-  border-bottom-color: #F15025;
-  border-bottom-width: 2px;
-  color: #F15025;
-  -webkit-box-shadow: none;
-          box-shadow: none;
+.login-form > .input-group {
+  line-height: 18px;
+  font-size: 17px;
 }

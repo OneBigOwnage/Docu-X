@@ -20,12 +20,11 @@ body {
   align-items: center;
 }
 
-
-.push-top-2 {
-  margin-top: 2cm;
-}
-
 /*Spacers*/
+  .v-spacer-before-05 {
+    margin-top: 0.5cm;
+  }
+
   .v-spacer-before-1 {
     margin-top: 1cm;
   }

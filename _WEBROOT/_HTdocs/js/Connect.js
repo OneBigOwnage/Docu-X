@@ -1,56 +1,38 @@
 /**
-* Method used to perform calls to the server.
-*
-* @param r        The routine you want to call on.
-* @param args     The arguments to pass the routine.
-* @param callback The name of the callback-function for when the serverCall is executed.
-* @param aSync    Wether or not this call should be executed asynchronously.
-*/
-function serverCall(rrr, args, callback, aSync = true) {
-  if (!rrr) {
-    console.log('Server Call invalid, no routine specified!');
+ * Function to perform a request to the serverside application.
+ * Requests are executed via AJAX, and you can specify a callback function.
+ * That function will be executed after the call is completed without errors,
+ * with the resulting data as argument.
+ *
+ * @method serverRequest
+ * @param  {String}       procedure    [description]
+ * @param  {String|Array} args         An array containing the
+ * @param  {String}       callback     [description]
+ * @param  {Boolean}      [aSync=true] [description]
+ * @return {Boolean}                   returns false only if no procedure was given,
+ *                                     or
+ */
+function serverRequest(procedure, args, callback, aSync = true) {
+  if (!procedure) {
+    //TODO: throw error.
     return false;
   } else if (callback != null && (typeof window[callback] !== 'function')) {
-    console.log('Server Call invalid, callback function does not exist!');
+    //TODO: throw error.
     return false;
   }
 
   $.ajax({
-    url: '/../Entrance.php',
-    async: aSync,
-    data:{
-      routine: rrr,
-      arguments: args
-        },
-    dataType: 'JSON',
-    success: function(data) {
-      // if (typeof window[callback] === 'function') {
-      //   window[callback](JSON.parse(data['response']));
-      // } else {
-      //   console.log('Response data:', data);
-      // }
-      let r = new Result(data);
-      r.printD();
-    },
-    error: function(data) {
-      // console.log(data);
-      if (data['statusText'] == 'parsererror') {
-        console.log('PHP Parse Error\n', data['responseText']);
+    url:      '/../Entrance.',
+    async:    aSync,
+    data:     {procedure: procedure, arguments: args},
+    datatype: 'JSON',
+    complete: function(rData, rStatus) {
+      if (!$.inArray(rStatus, ['notmodified', 'nocontent', 'error', 'timeout', 'abort', 'parsererror'])) {
+        window[callback](JSON.parse(rData['responseText']));
       } else {
-        console.log('AJAX Error\n', data);
+        //TODO: throw error.
       }
     }
-  });;
+  });
+  return true;
 }
-
-// TODO: Refactor Function.
-
-
-function Result(data) {
-  this.data = data;
-  this.printD = function() {
-    console.log("Printing data: " + data);
-  }
-}
-
-serverCall('routine');

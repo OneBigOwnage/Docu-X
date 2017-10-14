@@ -6,7 +6,7 @@ if (typeof imports === 'undefined') {
 
 /**
 * Imports another script into memory, only if it has not been imported before.
-* @param scriptName The name of the script you want to import, assumed path is 'root/Scripts/'!
+* @param scriptName The name of the script you want to import, assumed path is 'root/js/{scriptName}'!
 */
 function importScript(scriptName) {
 if ($.inArray(scriptName, imports)) {
@@ -16,7 +16,7 @@ if ($.inArray(scriptName, imports)) {
   imports.push(scriptName);
 }
 
-var fullName = '/JS/' + scriptName;
+var fullName = '/js/' + scriptName;
 
 $.getScript(fullName)
   .done(function(sName, status) {

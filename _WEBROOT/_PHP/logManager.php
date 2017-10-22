@@ -12,9 +12,10 @@
     }
 
     // Custom event handler for JavaScript events.
-    public static function jsHandler()
+    public static function jsHandler($obj)
     {
-        return false;
+        
+        return true;
     }
 
 

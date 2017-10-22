@@ -6,7 +6,7 @@
  *
  * @method serverRequest
  * @param  {String}       procedure    [description]
- * @param  {String|Array} args         An array containing the
+ * @param  {Array}        args         An array containing the
  * @param  {String}       callback     [description]
  * @param  {Boolean}      [aSync=true] [description]
  * @return {Boolean}                   returns false only if no procedure was given,
@@ -22,7 +22,7 @@ function serverRequest(procedure, args, callback, aSync = true) {
   }
 
   $.ajax({
-    url:      '/../Entrance.',
+    url:      '/../Entrance.php',
     async:    aSync,
     data:     {procedure: procedure, arguments: args},
     datatype: 'JSON',

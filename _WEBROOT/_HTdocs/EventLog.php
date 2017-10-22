@@ -3,7 +3,7 @@
   $page_name = "EVENT_LOG";
   $page_title = "Application Event Log";
 
-  Utils::inclCSS('EventLog.css');
+  Utils::inclCSS('EventLog');
   ?>
 <?php include_once 'page_header.php';?>
 

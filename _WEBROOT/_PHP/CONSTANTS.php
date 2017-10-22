@@ -10,7 +10,7 @@
   define('JS_LOC', '/js/');
 
   //LogManager
-  define('ERROR_LOG_TABLE', 'fwk_event_log');
+  define('ERROR_LOG_TABLE', 'fwk_error_log');
 
   define('E_TYPE_ERROR', 'error');
   define('E_TYPE_WARNING', 'warning');

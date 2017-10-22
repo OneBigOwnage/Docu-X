@@ -12,7 +12,7 @@ abstract class Utils
 
         if ($arg_count >= 1) {
             foreach ($args as $script) {
-                $GLOBALS['CSSIncludes'][] = $script;
+                $GLOBALS['CSSIncludes'][] = $script . '.css';
             }
         } else {
             //Errormsg.
@@ -30,7 +30,7 @@ abstract class Utils
 
         if ($arg_count >= 1) {
             foreach ($args as $script) {
-                $GLOBALS['JSIncludes'][] = $script;
+                $GLOBALS['JSIncludes'][] = $script . '.js';
             }
         } else {
             //Errormsg.

@@ -3,10 +3,11 @@
   $page_name = "LOGIN_PAGE";
   $page_title = "Log in to Docu-X";
 
-  Utils::inclCSS('login.css');
-  Utils::inclJS('login.js');
-  Utils::inclJS('Connect.js');
-  
+  Utils::inclCSS('login');
+  Utils::inclJS('login');
+  Utils::inclJS('Connect');
+  Utils::inclJS('eHandler');
+
   // noMenu();
   ?>
 <?php include_once 'page_header.php';?>

@@ -141,7 +141,7 @@
 
       private static function onError($message)
       {
-          echo $message;
+          echo htmlentities($message);
         //If there is no valid database-connection,
         //this should be handled via the backupHandler.
         if (!self::hasConnection()) {

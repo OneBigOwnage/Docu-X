@@ -26,8 +26,8 @@
           if (!$res) {
               self::onError("Query execution error:\n$queryString\n$res.");
               return false;
-          } else {
-              return $res;
+          } elseif (self::isSelectQuery($queryString)){
+              return self::resToArray($res);
           }
       }
 
@@ -64,7 +64,7 @@
       }
 
 
-      public static function Insert($table, $data)
+      public static function insert($table, $data)
       {
           if ($table == null || $data == null) {
               return false;
@@ -83,7 +83,7 @@
       }
 
 
-      public static function Update($table, $data, $where)
+      public static function update($table, $data, $where)
       {
           if (empty($table) || empty($data)) {
               return false;
@@ -106,7 +106,7 @@
       }
 
 
-      public static function Delete($table, $whereClause, $soft = true)
+      public static function delete($table, $whereClause, $soft = true)
       {
         $statement;
 
@@ -141,7 +141,7 @@
 
       private static function onError($message)
       {
-          echo htmlentities($message);
+          echo htmlentities($message) . PHP_EOL . " mysqli error: " . htmlentities(self::$conn->error);
         //If there is no valid database-connection,
         //this should be handled via the backupHandler.
         if (!self::hasConnection()) {
@@ -178,7 +178,7 @@
        */
       public static function resToArray($queryResult)
       {
-          if ($queryResult == null || !$queryResult || $queryResult->num_rows <= 0) {
+          if (empty($queryResult) || $queryResult->num_rows <= 0) {
               //TODO: Generate eMsg in log;
             return false;
           }
@@ -205,4 +205,12 @@
           }
           return self::$conn->real_escape_string($var);
       }
+
+
+      public static function isSelectQuery(string $query)
+      {
+        $trimMask = "( \t\n\r\0\x0B";
+        return 'SELECT' === strtoupper(substr(ltrim($query, $trimMask), 0, 6));
+      }
+
   }

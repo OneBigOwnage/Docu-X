@@ -1,28 +1,36 @@
 <?php
 
+require_once 'Error_Handling/Console.php';
+require_once 'Error_Handling/Error.php';
+require_once 'Error_Handling/ErrorObject.php';
+require_once 'Error_Handling/PHPError.php';
+require_once 'Error_Handling/JSError.php';
+
+
+
 abstract class errorController {
-  public $errors;
+  public static $errors;
 
 
-  public function getErrors($limit = 100)
+  public static function getErrors($limit = 100)
   {
 
   }
 
 
-  public function handlePHPError($eLevel, $eMessage, $eFileName, $eLineNr)
+  public static function handlePHPError($eLevel, $eMessage, $eFileName, $eLineNr)
   {
-    $e = new Error('PHPError', array('message' => $eMessage, 'level' => $eLevel, 'filename' => $eFileName, 'linenumber' => $eLineNr));
+    $e = new customError('PHPError', array('message' => $eMessage, 'level' => $eLevel, 'filename' => $eFileName, 'linenumber' => $eLineNr));
     $e->save();
   }
 
 
-  public function handleJSError()
+  public static function handleJSError()
   {
 
   }
 
-  public function tempHandler($eLevel, $eMessage, $eFileName, $eLineNr) {
+  public static function tempHandler($eLevel, $eMessage, $eFileName, $eLineNr) {
     echo $eLevel, $eMessage, $eFileName, $eLineNr;
   }
 

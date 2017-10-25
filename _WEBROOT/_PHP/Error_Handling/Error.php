@@ -1,6 +1,6 @@
 <?php
 
-class Error
+class customError
 {
     private $errorObj;
     private $errorClass;
@@ -10,15 +10,17 @@ class Error
     public function __construct($eClass, $errorArguments)
     {
       $this->errorClass = $eClass;
-      $this->errorObj = $eClass($errorArguments);
+      $this->errorObj = new $eClass($errorArguments);
       $this->accountID = false; // TODO: get account id from ums-controller.
     }
 
 
     public function save()
     {
-      //errorObj->toJSON();
-      //Insert error into db, call altSave if saving to database fails.
+      $obj = array( 'error_object' => $this->errorObj->toJSON(),
+                    'object_class' => $this->errorClass);
+
+      Database::insert('fwk_error_log', $obj);
     }
 
 

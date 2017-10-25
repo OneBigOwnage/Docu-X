@@ -5,8 +5,8 @@
 ALTER TABLE fwk_error_log
   DROP FOREIGN KEY IF EXISTS fk_fwk_error_log__to__ums_account;
 
-ALTER TABLE fwk_console
-	DROP FOREIGN KEY IF EXISTS fk_fwk_console__to__ums_account;
+ALTER TABLE fwk_console_lines
+	DROP FOREIGN KEY IF EXISTS fk_fwk_console_lines__to__ums_account;
 -- #############################################################################
 
 -- Table definition for fwk_error_log.
@@ -25,8 +25,8 @@ CREATE TABLE fwk_error_log (
 );
 
 -- Table definition for fwk_console.
-DROP TABLE IF EXISTS fwk_console;
-CREATE TABLE fwk_console (
+DROP TABLE IF EXISTS fwk_console_lines;
+CREATE TABLE fwk_console_lines (
 	id BIGINT (10) ZEROFILL AUTO_INCREMENT, -- Primary Key
 	output_text TEXT,
 	line_number INT,
@@ -48,5 +48,5 @@ ALTER TABLE fwk_error_log ADD CONSTRAINT FOREIGN KEY fk_fwk_error_log__to__ums_a
   (account_id) REFERENCES ums_account (id);
 
 
-ALTER TABLE fwk_console ADD CONSTRAINT FOREIGN KEY fk_fwk_console__to__ums_account
+ALTER TABLE fwk_console_lines ADD CONSTRAINT FOREIGN KEY fk_fwk_console_lines__to__ums_account
   (account_id) REFERENCES ums_account (id);

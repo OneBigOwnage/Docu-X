@@ -13,18 +13,17 @@
     <thead>
       <tr>
         <th class="col-xs-1">Time</th>
-        <th class="col-xs-9">Message</th>
-        <th class="col-xs-2">Origin & Type</th>
+        <th class="col-xs-9">JSON</th>
       </tr>
-      <tbody>
-        <?php
-          $ds = Database::enhancedSelect("SELECT c_dt, message, type, origin FROM " . ERROR_LOG_TABLE . " WHERE d_dt IS NULL ORDER BY c_dt DESC;");
-          foreach ($ds as $row) {
-            echo "<tr><td>".$row['c_dt']."</td><td>".str_replace(array("\r\n", "\n", "\r"), " ", $row['message'])."</td><td>".$row['origin']." - ".$row['type']."</td></tr>";
-          }
-         ?>
-      </tbody>
     </thead>
+    <tbody>
+      <?php
+        $ds = Database::enhancedSelect("SELECT c_dt, error_object, object_class FROM fwk_error_log WHERE d_dt IS NULL ORDER BY c_dt DESC;");
+        foreach ($ds as $row) {
+            echo "<tr><td>".$row['c_dt']."</td><td>".$row['error_object']."</td></tr>";
+        }
+       ?>
+    </tbody>
   </table>
 </div>
 

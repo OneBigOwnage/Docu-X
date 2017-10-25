@@ -3,16 +3,13 @@
   src: url(../fonts/Ubuntu-Regular.ttf);
 }
 
-
 *:not(.glyphicon):not(.fa) {
   font-family: Ubuntu-Regular;
 }
 
-
 body {
   background-color: #DFDFD0;
 }
-
 
 .h-center-container {
   display: flex;
@@ -21,32 +18,33 @@ body {
 }
 
 /*Spacers*/
-  .v-spacer-before-05 {
-    margin-top: 0.5cm;
-  }
 
-  .v-spacer-before-1 {
-    margin-top: 1cm;
-  }
+.v-spacer-before-05 {
+  margin-top: 0.5cm;
+}
 
-  .v-spacer-before-2 {
-    margin-top: 2cm;
-  }
+.v-spacer-before-1 {
+  margin-top: 1cm;
+}
 
-  .v-spacer-before-3 {
-    margin-top: 3cm;
-  }
+.v-spacer-before-2 {
+  margin-top: 2cm;
+}
 
-  .v-spacer-after-1 {
-    margin-bottom: 1cm;
-  }
+.v-spacer-before-3 {
+  margin-top: 3cm;
+}
 
-  .v-spacer-after-2 {
-    margin-bottom: 2cm;
-  }
+.v-spacer-after-1 {
+  margin-bottom: 1cm;
+}
 
-  .v-spacer-after-3 {
-    margin-bottom: 3cm;
-  }
+.v-spacer-after-2 {
+  margin-bottom: 2cm;
+}
+
+.v-spacer-after-3 {
+  margin-bottom: 3cm;
+}
 
 /*End of Spacers*/

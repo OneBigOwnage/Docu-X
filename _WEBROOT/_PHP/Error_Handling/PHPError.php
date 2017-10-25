@@ -13,7 +13,7 @@ class PHPError extends ErrorObject
     $this->message = $args['message'];
     $this->level = $args['level'];
     $this->lineNumber = $args['linenumber'];
-    $this->fineName = $args['filename'];
+    $this->fileName = $args['filename'];
   }
 
 }

@@ -21,6 +21,7 @@ function AJAXReply($successful, $data) {
 }
 
 
+
 //Procedure declaration area.
 //-------------------------
 
@@ -38,6 +39,21 @@ function registerJSError($obj) {
     AJAXReply(false, array('message' => "The error has not been logged correctly, please check the server-log!"));
   }
 }
+
+
+function console_log($obj)
+{
+  Console::log($obj['message']);
+}
+
+
+function get_new_console_logs()
+{
+  $data = Console::getOpenLogs();
+  // Console::log("getOpenLogs: " . var_export($data));
+  AJAXReply(true, $data);
+}
+
 
 
 ?>

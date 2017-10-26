@@ -62,7 +62,7 @@ $dataSet = Database::enhancedSelect("SELECT c_dt, output_text FROM fwk_console_l
       <button id="console-btn-settings" type="button" class="btn-square"><span class="glyphicon glyphicon-cog"></span></button>
     </div>
   </div>
-  <div id="console-window">
+  <div id="console-window" class="custom-scroll-bar">
     <div style="margin-bottom:auto;"></div>
   </div>
 </div>

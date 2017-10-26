@@ -14,7 +14,6 @@ function addConsoleLogCallback(args) {
 //Make the console draggable, the top bar is the handle.
 $('.console').draggable({handle:'#console-top-bar'});
 
-
 function fetchConsoleLogs() {
   serverRequest('get_new_console_logs', null, 'processIncomingConsoleLogs');
 }
@@ -32,9 +31,12 @@ function processIncomingConsoleLogs(obj) {
 
 function addLineToConsole(line) {
   let $consoleList = $('.console').find('#console-window');
-  // let lineHTML = `<li>${line.toString()}</li>`;
-  let lineHTML = `<div class="console-line">${line.toString()}</div>`;
+  let lineHTML = `<div class="console-line">[${line['c_dt']}] ${line['output_text']}</div>`;
   $consoleList.append(lineHTML);
+
+  //Next line is to autoscroll to the bottom of the console.
+  // $consoleList.animate({scrollTop:$consoleList[0].scrollHeight}, 1000);
+  $consoleList.scrollTop($consoleList[0].scrollHeight);
 }
 
 
@@ -44,4 +46,5 @@ function hardLoad(amount) {
   }
 }
 
-hardLoad(15);
+fetchConsoleLogs();
+// hardLoad(15);

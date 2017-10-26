@@ -13,7 +13,7 @@
  *                                     or the provided callback is not a function.
  */
 function serverRequest(procedure, args, callback, aSync = true) {
-  let isSet = !empty(callback);
+  let isSet = !Utils.empty(callback);
   if (!procedure) {
     //TODO: throw error.
     return false;

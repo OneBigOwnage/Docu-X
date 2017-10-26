@@ -30,7 +30,7 @@ function serverRequest(procedure, args, callback, aSync = true) {
     complete: function(rData, rStatus) {
       let failResponses = ['notmodified', 'nocontent', 'error', 'timeout', 'abort', 'parsererror'];
       if ($.inArray(rStatus, failResponses) == -1) {
-        if (isSet && isJSON(rData['responseText'])) {
+        if (isSet && Utils.isJSON(rData['responseText'])) {
           window[callback](JSON.parse(rData['responseText']));
         } else {
           console.log("No callback was specified of the response is an invalid JSON. The response is output to console:\n", rData['responseText']);

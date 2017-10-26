@@ -61,7 +61,7 @@ class Utils {
    *
    * @method empty
    * @param  {any}  variable Variable to be tested on emptyness.
-   * @return {Boolean}      Returns TRUE for empty values, else returns FALSE.
+   * @return {Boolean}      Returns TRUE for empty values as described above, otherwise returns FALSE.
    */
   static empty(v) {
     return !(typeof(v) !== 'undefined' && v);
@@ -72,54 +72,57 @@ class Utils {
     return (new Date(str) !== "Invalid Date") && !isNaN(new Date(str));
   }
 
+
   static replaceAll(input, search, replace) {
     return input.split(search).join(replace);
   }
 
+  /**
+   * Method to format a Date (-string); If no date is given, a new (current) date will be used.
+   * Below is a legend with the usable format-characters.
+   *
+   * #Year
+   * y    - Short numeric representation of a year, 2 digits
+   * Y    - Full numeric representation of a year, 4 digits
+   *
+   * #Month
+   * m    - Numeric representation of a month, without leading zero
+   * M    - Numeric representation of a month, with leading zero
+   *
+   * #Day
+   * d    - Day of the month, without leading zero
+   * D    - Day of the month, with leading zero
+   *
+   * #Time
+   * g    - 12-hour format of an hour, without leading zero
+   * G    - 12-hour format of an hour, with leading zero
+   * h    - 24-hour format of an hour, without leading zero
+   * H    - 24-hour format of an hour, with leading zero
+   * i    - Minutes without leading zero
+   * I    - Minutes with leading zero
+   * s    - Seconds without leading zero
+   * S    - Seconds with leading zero.
+   *
+   * #Default formats
+   * xx   - [16:01]                 - Default padded time format
+   * XX   - [07:44:53]              - Default padded accurate time format
+   * qq   - [31-12-96]              - Default date format (Dutch)
+   * QQ   - [02-08-2022]            - Default padded date format 2 (Japanese)
+   * ww   - [96-12-31]              - Default date format (Japanese)
+   * WW   - [1996-06-17]            - Default padded date format (Japanese)
+   * BB   - [1996-04-03 14:26:34]   - Default padded full date & time format (Japanese)
+   *
+   *
+   * @method formatDateTime
+   * @param  {String}       format    Format that should be used as
+   * @param  {Date}         [date=new Date()]       [description]
+   * @return {[type]}                 [description]
+   */
   static formatDateTime(format, date = new Date()) {
     if (!Utils.isDate(date)) {
       return false;
     }
-
     //TODO: Various checks on the date... (Date.parse or new Date(string))
-
-    /*
-    #Year
-    y   - Short numeric representation of a year, 2 digits
-    Y   - Full numeric representation of a year, 4 digits
-
-    #Month
-    m   - Numeric representation of a month, without leading zero
-    M   - Numeric representation of a month, with leading zero
-
-    #Day
-    d   - Day of the month, without leading zero
-    D   - Day of the month, with leading zero
-
-    #Time
-    g   - 12-hour format of an hour, without leading zero
-    G   - 12-hour format of an hour, with leading zero
-    h   - 24-hour format of an hour, without leading zero
-    H   - 24-hour format of an hour, with leading zero
-    i   - Minutes without leading zero
-    I   - Minutes with leading zero
-    s   - Seconds without leading zero
-    S   - Seconds with leading zero.
-
-    #Default Formats
-    xx  - [16:01]                 - Default padded time format
-    XX  - [07:44:53]              - Default padded accurate time format
-
-    qq  - [31-12-96]              - Default date format (Dutch)
-    QQ  - [02-08-2022]            - Default padded date format 2 (Japanese)
-
-    ww  - [96-12-31] - Default date format (Japanese)
-    WW  - [1996-06-17] - Default padded date format (Japanese)
-
-    BB  - [1996-04-03 14:26:34]   - Default padded full date & time format (Japanese)
-    */
-
-
     // Setting of the format replacers.
     let y = date.getFullYear().toString().substring(2, 2);
     let Y = date.getFullYear();

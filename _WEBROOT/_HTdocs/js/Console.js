@@ -14,29 +14,6 @@ function addConsoleLogCallback(args) {
 //Make the console draggable, the top bar is the handle.
 $('.console').draggable({handle:'#console-top-bar'});
 
-let phpConsole = new _phpConsole();
-
-function _phpConsole() {
-  this.logLines = ['line', 'line', 'line'];
-
-  this.fetchLogs = function() {
-
-  }
-
-  this.processIncoming = function(e) {
-
-  }
-
-  this.getLogs = function() {
-    return logLines;
-  }
-
-}
-
-
-
-//Array to keep track of all log lines in the browser.
-let logLines = [];
 
 function fetchConsoleLogs() {
   serverRequest('get_new_console_logs', null, 'processIncomingConsoleLogs');

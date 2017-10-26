@@ -52,12 +52,18 @@ $dataSet = Database::enhancedSelect("SELECT c_dt, output_text FROM fwk_console_l
 
 <div class="console draggable">
   <div id="console-top-bar">
-    Console
+    <div id="console-title">
+      Console
+    </div>
+    <div id="console-btn-container">
+      <button id="console-btn-search"   type="button" class="btn-square"><span class="glyphicon glyphicon-search"></span></button>
+      <button id="console-btn-filter"   type="button" class="btn-square"><span class="glyphicon glyphicon-filter"></span></button>
+      <button id="console-btn-clear"    type="button" class="btn-square"><span class="glyphicon glyphicon-ban-circle"></span></button>
+      <button id="console-btn-settings" type="button" class="btn-square"><span class="glyphicon glyphicon-cog"></span></button>
+    </div>
   </div>
-  <div id="console-window" class="push-down-next">
-    <ul id="console-list">
-      
-    </ul>
+  <div id="console-window">
+    <div style="margin-bottom:auto;"></div>
   </div>
 </div>
 

@@ -54,9 +54,17 @@ function processIncomingConsoleLogs(obj) {
 
 
 function addLineToConsole(line) {
-  let $consoleList = $('.console').find('#console-list');
-  let lineHTML = `<li>${line.toString()}</li>`;
+  let $consoleList = $('.console').find('#console-window');
+  // let lineHTML = `<li>${line.toString()}</li>`;
+  let lineHTML = `<div class="console-line">${line.toString()}</div>`;
   $consoleList.append(lineHTML);
 }
 
-fetchConsoleLogs();
+
+function hardLoad(amount) {
+  for (var i = 0; i < amount; i++) {
+    addLineToConsole('[DATETIME] ' + i);
+  }
+}
+
+hardLoad(15);

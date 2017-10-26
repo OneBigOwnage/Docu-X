@@ -56,18 +56,19 @@
   margin-right: 10px;
 }
 
+
 button.btn-square {
-  height: 20px;
   border-top-style: hidden;
   border-bottom-style: hidden;
-  border-left-style: hidden;
-}
-
-button.btn-square:not(.lol
-/*last*/
-
-) {
   border-right-style: solid;
-  border-width: 2px;
-  border-color:
+  border-left-style: solid;
+  border-width: 0.5px;
+  border-color: black;
+
+  margin-left: 0px;
+  margin-right: 0px;
+
+  padding: 0px 5px 0px 5px;
+
+  height: 26px;
 }

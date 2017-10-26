@@ -8,31 +8,34 @@ function addConsoleLogCallback(args) {
   console.log('Callback: ', args);
 }
 
+// Class Definition
+class phpConsole {
+
+
+  static getLines() {
+    return phpConsole.lines;
+  }
+
+  static setLines(l) {
+    phpConsole.lines = l;
+  }
+
+  static show() {
+
+  }
+
+
+
+}
+// Static property definition.
+phpConsole.lines;
+
+//-- End Class Definition
 
 //New Start
 //--------------------
 //Make the console draggable, the top bar is the handle.
 $('.console').draggable({handle:'#console-top-bar'});
-
-let phpConsole = new _phpConsole();
-
-function _phpConsole() {
-  this.logLines = ['line', 'line', 'line'];
-
-  this.fetchLogs = function() {
-
-  }
-
-  this.processIncoming = function(e) {
-
-  }
-
-  this.getLogs = function() {
-    return logLines;
-  }
-
-}
-
 
 
 //Array to keep track of all log lines in the browser.
@@ -55,9 +58,12 @@ function processIncomingConsoleLogs(obj) {
 
 function addLineToConsole(line) {
   let $consoleList = $('.console').find('#console-window');
-  // let lineHTML = `<li>${line.toString()}</li>`;
-  let lineHTML = `<div class="console-line">${line.toString()}</div>`;
+  let lineHTML = `<div class="console-line">[${line['c_dt']}] ${line['output_text']}</div>`;
   $consoleList.append(lineHTML);
+
+  //Next line is to autoscroll to the bottom of the console.
+  // $consoleList.animate({scrollTop:$consoleList[0].scrollHeight}, 1000);
+  $consoleList.scrollTop($consoleList[0].scrollHeight);
 }
 
 
@@ -67,4 +73,5 @@ function hardLoad(amount) {
   }
 }
 
-hardLoad(15);
+fetchConsoleLogs();
+// hardLoad(15);

@@ -131,7 +131,7 @@
 
       public static function enhancedSelect($query)
       {
-        if (strpos(strtoupper(ltrim($query)), 'SELECT') === 0) {
+        if (self::isSelectQuery($query)) {
           return self::execQuery($query);
         } else {
           return false;
@@ -194,9 +194,8 @@
       /**
        * Escapes all dangerous characters in a given variable.
        * @method sanitize
-       * @param  any      $var Variable to sanitize.
-       * @return [type]        Returns false if no connection,
-       *                       otherwise returns sanitized variable.
+       * @param  any            $var Variable to sanitize.
+       * @return [type]         Returns false if no connection, otherwise returns sanitized variable.
        */
       public static function sanitize($var)
       {

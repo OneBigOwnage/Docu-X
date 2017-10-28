@@ -61,7 +61,7 @@ class Utils {
    *
    * @method empty
    * @param  {any}  variable Variable to be tested on emptyness.
-   * @return {Boolean}      Returns TRUE for empty values as described above, otherwise returns FALSE.
+   * @return {Boolean}      Returns true for empty values as described above, otherwise returns FALSE.
    */
   static empty(v) {
     return !(typeof(v) !== 'undefined' && v);
@@ -74,7 +74,14 @@ class Utils {
 
 
   static replaceAll(input, search, replace) {
-    return input.split(search).join(replace);
+    if (Array.isArray(search)) {
+      search.forEach(function(s) {
+        input = input.split(s).join(replace);
+      });
+      return input;
+    } else {
+      return input.split(search).join(replace);
+    }
   }
 
   /**
@@ -121,8 +128,10 @@ class Utils {
   static formatDateTime(format, date = new Date()) {
     if (!Utils.isDate(date)) {
       return false;
+    } else {
+      date = new Date(date);
     }
-    //TODO: Various checks on the date... (Date.parse or new Date(string))
+
     // Setting of the format replacers.
     let y = date.getFullYear().toString().substring(2, 2);
     let Y = date.getFullYear();
@@ -189,4 +198,38 @@ class Utils {
     return format;
   }
 
+  /**
+   * Method to check if function exists in the global context.
+   * Returns true if and only if funcName is a callable function in the global context.
+   * @method isFunc
+   * @param  {[type]}  funcName The String representing the function to check.
+   * @return {Boolean}          Returns true if funcName exists in global context.
+   */
+  static isFunc(funcName) {
+    if (Utils.empty(funcName)) {
+      return false;
+    }
+    funcName = Utils.replaceAll(funcName, ['(', ')'], '');
+    return eval(`typeof ${funcName} === 'function';`);
+  }
+
+  /**
+   *  Method to call a function with a dynamically entered name,
+   *  also accepts extra parameters to be passed with the function.
+   *
+   * @method callFunctionFromString
+   * @param  {String}               funcName The name of the function passed as a String.
+   * @param  {String|Array<any>}    [funcArgs=''] Array of arguments to be passed in with the to call function.
+   * @return {void}                 TODO: add return?
+   */
+  static callFunctionFromString(funcName, ...funcArgs) {
+    if (!Utils.isFunc(funcName)) {
+      // TODO: error
+      return false;
+    } else {
+      (eval(`${funcName}`)(...funcArgs));
+    }
+    // TODO: Refactor using window[]
+    // Source: https://stackoverflow.com/questions/912596/how-to-turn-a-string-into-a-javascript-function-call
+  }
 }

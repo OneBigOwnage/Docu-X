@@ -1,7 +1,7 @@
 /**
  * Function to perform a request to the serverside application.
  * Requests are executed via AJAX, and you can specify a callback function.
- * That function will be executed after the call is completed without errors,
+ * The callback will be executed after the call is completed without errors,
  * with the resulting data as argument.
  *
  * @method serverRequest
@@ -17,7 +17,7 @@ function serverRequest(procedure, args, callback, aSync = true) {
   if (!procedure) {
     //TODO: throw error.
     return false;
-  } else if (isSet && (typeof window[callback] !== 'function')) {
+  } else if (isSet && !Utils.isFunc(callback)) {
     //TODO: throw error.
     return false;
   }
@@ -31,7 +31,7 @@ function serverRequest(procedure, args, callback, aSync = true) {
       let failResponses = ['notmodified', 'nocontent', 'error', 'timeout', 'abort', 'parsererror'];
       if ($.inArray(rStatus, failResponses) == -1) {
         if (isSet && Utils.isJSON(rData['responseText'])) {
-          window[callback](JSON.parse(rData['responseText']));
+          Utils.callFunctionFromString(callback, JSON.parse(rData['responseText'])['responseData']);
         } else {
           console.log("No callback was specified of the response is an invalid JSON. The response is output to console:\n", rData['responseText']);
         }

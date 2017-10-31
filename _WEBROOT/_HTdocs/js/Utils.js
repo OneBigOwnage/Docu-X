@@ -72,7 +72,14 @@ class Utils {
     return (new Date(str) !== "Invalid Date") && !isNaN(new Date(str));
   }
 
-
+/**
+ * Replaces all occurences of a string with another string.
+ * @method replaceAll
+ * @param  {String}   input   [description]
+ * @param  {String}   search  [description]
+ * @param  {String}   replace [description]
+ * @return {String}           The returned string is the result of the replacements
+ */
   static replaceAll(input, search, replace) {
     if (Array.isArray(search)) {
       search.forEach(function(s) {

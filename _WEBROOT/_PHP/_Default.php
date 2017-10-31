@@ -17,5 +17,5 @@
 
   //By Default we need some Bootstrap and jQuery imports.
   Utils::inclCSS('bootstrap.min', 'fa.min', 'master');
-  Utils::inclJS('jquery.min', 'bootstrap.min','Utils');
+  Utils::inclJS('./Libraries/jquery-3.2.1', './Libraries/bootstrap.min', './Libraries/jQueryExpansion', 'Utils');
  ?>

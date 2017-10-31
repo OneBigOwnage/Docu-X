@@ -15,4 +15,4 @@ window.addEventListener('error', function(e) {
 
 myfunc();
 
-//TODO: Write custom exceptions, and handle them.
+//TODO: Write custom errors & exceptions, and handle them.

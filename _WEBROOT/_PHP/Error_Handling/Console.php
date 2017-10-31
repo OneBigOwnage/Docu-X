@@ -13,7 +13,7 @@ abstract class Console
 
   public static function getOpenLogs()
   {
-    $dataset = Database::enhancedSelect("SELECT id, c_dt, output_text FROM fwk_console_lines WHERE posted = 0 AND d_dt IS NULL ORDER BY c_dt DESC;");
+    $dataset = Database::enhancedSelect("SELECT id, c_dt, output_text FROM fwk_console_lines WHERE posted = 0 AND d_dt IS NULL ORDER BY c_dt ASC;");
     return $dataset;
   }
 

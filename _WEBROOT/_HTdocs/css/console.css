@@ -8,12 +8,15 @@
   z-index: 999;
   position: absolute;
   left: 5px;
-  top: 5px;
+  top: 100px;
+  /**/
   min-width: 800px;
   width: 800px;
   min-height: 300px;
   height: 300px;
+  /**/
   background-color: transparent;
+  /**/
   border-color: #919191;
   border-style: solid;
   border-width: thin;
@@ -27,12 +30,16 @@
 
 #console-top-bar {
   background-color: #DBDBDB;
+  color: #4D4646;
+  /**/
   display: flex;
   height: 30px;
   padding-left: 5px;
+  /**/
   font-size: 21px;
-  line-height: 30px;
   font-weight: 600;
+  line-height: 30px;
+  /**/
   border-bottom-color: #919191;
   border-bottom-style: solid;
   border-bottom-width: thin;
@@ -43,32 +50,73 @@
 #console-window {
   display: flex;
   flex-direction: column;
+  /**/
   height: 100%;
-  background-color: #FFFFFF;
   overflow-y: scroll;
+  /**/
+  background-color: #FFFFFF;
 }
-
-.console-line {}
 
 #console-btn-container {
   position: absolute;
-  right: 0px;
-  margin-right: 10px;
+  right: 8px;
+  display: flex;
 }
 
-
 button.btn-square {
-  border-top-style: hidden;
-  border-bottom-style: hidden;
-  border-right-style: solid;
-  border-left-style: solid;
-  border-width: 0.5px;
-  border-color: black;
-
+  border-style: hidden;
+  /**/
   margin-left: 0px;
   margin-right: 0px;
-
   padding: 0px 5px 0px 5px;
+  /**/
+  height: 27px;
+  /**/
+  background-color: transparent;
+  /**/
+  color: inherit;
+  /**/
+  outline: none;
+}
 
-  height: 26px;
+.console-line:hover {
+  background-color: #EBE8E8;
+}
+
+.console-line {
+  z-index: 1;
+}
+
+#console-btn-container > input {
+  outline: none;
+  display: none;
+  /**/
+  font-weight: lighter;
+  font-size: 16px;
+  color: rgb(84, 84, 84);
+  /**/
+  height: 22px;
+  width: 0px;
+  margin: 2px -2px 2px 0px;
+  padding: 4px 8px 4px 8px;
+  /**/
+  border-radius: 2px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: rgba(51, 51, 51, 0.5);
+  /**/
+  transition: border-color 0.5s ease-in-out;
+  transition: box-shadow 0.5s ease-in-out;
+}
+
+#console-btn-container > input:focus {
+  box-shadow: 0 0 5px #2392F4;
+  border: 1px solid #2392F4;
+}
+
+#console-window span.find {
+  z-index: -1;
+  background-color: #F7EB48;
+  border-radius: 4px;
+  box-shadow: -4px 0px #F7EB48, 4px 0px #F7EB48;
 }

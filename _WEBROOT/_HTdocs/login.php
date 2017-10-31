@@ -4,11 +4,7 @@
   $page_title = "Log in to Docu-X";
 
   Utils::inclCSS('login');
-  Utils::inclJS('login');
-  Utils::inclJS('Connect');
-  Utils::inclJS('eHandler');
-
-  // noMenu();
+  Utils::inclJS('login', 'Connect', 'eHandler');
   ?>
 <?php include_once 'page_header.php';?>
 

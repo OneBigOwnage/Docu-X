@@ -3,15 +3,13 @@ require_once '_Default.php';
 
 //Routine selection area.
 //-----------------------
-
 if (function_exists($_GET['procedure'])) {
   if (!empty($_GET['arguments'])) {
-    $_GET['procedure']($_GET['arguments']);
+    $_GET['procedure'](json_decode($_GET['arguments'], true));
   } else {
     $_GET['procedure']();
   }
 } else {
-  // echo json_encode(false, json_encode(array(''));
   AJAXReply(false, array());
 }
 
@@ -25,13 +23,9 @@ function AJAXReply($successful, $data) {
 //Procedure declaration area.
 //-------------------------
 
-function verifyCredentials() {
-  AJAXReply(true, array('no' => 'data'));
-}
-
 
 function registerJSError($obj) {
-  $handle = logManager::jsHandler($obj);
+  $handle = true;//logManager::jsHandler($obj);
 
   if ($handle) {
     AJAXReply(true, array('message' => "The error has successfully logged to the database!"));
@@ -47,13 +41,17 @@ function console_log($obj)
 }
 
 
-function get_new_console_logs()
+function console_get_logs()
 {
+  Console::log('Hello World');
   $data = Console::getOpenLogs();
-  // Console::log("getOpenLogs: " . var_export($data));
   AJAXReply(true, $data);
 }
 
 
-
+function console_set_posted($obj)
+{
+  $handle = Console::setLogPosted($obj['id'], $obj['posted']);
+  AJAXReply(true, $handle);
+}
 ?>

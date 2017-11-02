@@ -10,7 +10,6 @@ $('.console').draggable({
 // Class declaration of phpConsole_
 class PHPConsole {
   constructor() {
-    // this.jQlines = $('.console-line');
     this.lines = {};
     this.settings = {};
     this.isPersistent;
@@ -40,7 +39,8 @@ class PHPConsole {
     this.filter(true);
     this.search(true);
     // If animating, stop the current animation, scroll to the end instantly and start a new animation.
-    $win.scrollTop(this.$consoleWindow[0].scrollHeight);
+    // $win.scrollTop(this.$consoleWindow[0].scrollHeight);
+    this.scroll(true);
   }
 
   /**
@@ -74,11 +74,15 @@ class PHPConsole {
    * @return {void}
    */
   removeLine(lineObj) {
-    if (Utils.empty(lineObj)) {
+    if (lineObj === true) {
       this.lines = {};
+    } else if (Array.isArray(lineObj)) {
+      for (line of lineObj) {
+        this.removeLine(line);
+      }
+    } else if(typeof lineObj === 'string') {
+      delete this.lines[lineObj];
     }
-    //TODO: Implement.
-    this.refresh();
   }
 
   /**
@@ -87,7 +91,7 @@ class PHPConsole {
    * @return {void}
    */
   fetchLines() {
-    serverRequest('get_new_console_logs', null, 'phpConsole.fetchLinesCallback', true, this);
+    serverRequest('console_get_logs', null, 'phpConsole.fetchLinesCallback', true, this);
   }
 
 /**
@@ -100,6 +104,35 @@ class PHPConsole {
     t.addLine(obj);
   }
 
+  /**
+   * Sets a line as 'posted' in the backend database, this way it will not be retrieved on next fetch.
+   * Can also give false as second parameter to set line as 'not posted'.
+   * @method setLinePosted
+   * @param  {String|Array<String>}      lineID        LineID or Array of IDs to set
+   * @param  {Boolean}                   [posted=true] Whether to set as 'posted' or 'not posted', defaults to true
+   * @return {void}
+   */
+  setLinePosted(lineID, posted = true) {
+    if (lineID === true) {
+      let list = [];
+      for (let l of Object.keys(this.lines)) {
+        let hidden = $(`div.console-line[line-id=${l}]`).is(':hidden');
+        if (!hidden) {
+          list.push(l);
+        }
+      }
+      this.setLinePosted(list, posted);
+    } else if (Array.isArray(lineID)) {
+      serverRequest('console_set_posted', JSON.stringify({id:lineID, posted:posted}));
+      for (let line of lineID) {
+        this.removeLine(line);
+      }
+    } else if (typeof lineID === 'string') {
+      serverRequest('console_set_posted', JSON.stringify({id:lineID, posted:posted}));
+      this.removeLine(lineID);
+    }
+    this.refresh();
+  }
 
   /**
    * Filters the console by given string and refreshes the console-view.
@@ -137,18 +170,6 @@ class PHPConsole {
    */
   setPersistence(p = true, obj) {
     //TODO: Implement
-  }
-
-  /**
-   * Sets a line as 'posted' in the backend database, this way it will not be retrieved on next fetch.
-   * Can also give false as second parameter to set line as 'not posted'.
-   * @method setLinePosted
-   * @param  {String|Array<String>}      lineID        LineID or Array of IDs to set
-   * @param  {Boolean}                   [posted=true] Whether to set as 'posted' or 'not posted', defaults to true
-   * @return {void}
-   */
-  setLinePosted(lineID, posted = true) {
-    // TODO: Implement posted
   }
 
   /**
@@ -194,11 +215,13 @@ class PHPConsole {
   }
 
   scroll(elem) {
-    // if true, scroll to bottom of list.
-    // FIXME
-    if (elem === true) {
+    if (this.$consoleWindow.is(':animated')) {
+      console.log('Already animating');
+      return false;
+    }
+    if (elem === true && !Utils.empty($('.console-line:last').length)) {
       this.scroll($('.console-line:last'));
-    } else {
+    } else if (elem !== true && !Utils.empty($(elem).length)) {
       $(this.$consoleWindow).scrollTo($(elem), 200);
     }
   }
@@ -247,7 +270,7 @@ $('#console-btn-refresh').on('click', function() {
 });
 
 $('#console-btn-clear').on('click', function() {
-  phpConsole.removeLine();
+  phpConsole.setLinePosted(true);
 });
 
 $('#console-input-search').on('keyup', function() {
@@ -257,4 +280,5 @@ $('#console-input-search').on('keyup', function() {
 $('#console-input-filter').on('keyup', function() {
   phpConsole.filter($(this).val());
 });
+
 // Testing area

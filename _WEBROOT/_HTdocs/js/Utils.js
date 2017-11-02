@@ -28,6 +28,7 @@
           top: e.pageY + pos_y - drg_h,
           left: e.pageX + pos_x - drg_w
         }).on("mouseup", function() {
+          $drag.parents().off("mousemove");
           $(this).removeClass('is-dragging').css('z-index', z_idx);
         });
       });
@@ -56,15 +57,25 @@ class Utils {
 
 
   /**
-   * Check if given variable is empty. Will return true for the following:
-   * Null / undefined variable / empty string ("") / 0 / false
+   * Check if given variable is empty. Will return true for the following values:
+   * - undefined;
+   * - null;
+   * - ''         = (empty string);
+   * - 0          = (integer with a value of zero);
+   * - []         = (empty array);
+   * - {}         = (empty Object)
+   * - false      = (boolean with value false);
    *
    * @method empty
    * @param  {any}  variable Variable to be tested on emptyness.
-   * @return {Boolean}      Returns true for empty values as described above, otherwise returns FALSE.
+   * @return {Boolean}      Returns true for empty values as described above, otherwise returns false.
    */
   static empty(v) {
-    return !(typeof(v) !== 'undefined' && v);
+    return !
+      (typeof(v) !== 'undefined'
+      && v
+      && !(Array.isArray(v) && v.length === 0)
+      && !(typeof v === 'object' && Object.keys(v).length === 0 && v.constructor === Object));
   }
 
 

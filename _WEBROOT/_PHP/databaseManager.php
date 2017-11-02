@@ -82,7 +82,6 @@
           return self::execQuery($statement);
       }
 
-
       public static function update($table, $data, $where)
       {
           if (empty($table) || empty($data)) {
@@ -94,14 +93,7 @@
               $statement .= self::sanitize($colName) . " = '" . self::sanitize($val) . "', ";
           }
 
-          $statement = substr($statement, 0, strlen($statement) - 2) . " WHERE ";
-          //TODO: Make this into oneliner $statement .=  self::whereSolver($where) . ";";
-          if (!self::whereSolver($where)) {
-            $statement .= $where . ";";
-          } else {
-            $statement .= ";";
-          }
-
+          $statement = substr($statement, 0, strlen($statement) - 2) . self::whereSolver($where) . ';';
           return self::execQuery($statement);
       }
 
@@ -141,7 +133,8 @@
 
       private static function onError($message)
       {
-          echo htmlentities($message) . PHP_EOL . " mysqli error: " . htmlentities(self::$conn->error);
+          // echo htmlentities($message) . PHP_EOL . " mysqli error: " . htmlentities(self::$conn->error);
+          Console::log($message);
         //If there is no valid database-connection,
         //this should be handled via the backupHandler.
         if (!self::hasConnection()) {
@@ -201,6 +194,11 @@
       {
           if (!self::hasConnection()) {
               return false;
+          }
+          switch (gettype($var)) {
+            case 'array':
+              $var = var_export($var, true);
+              break;
           }
           return self::$conn->real_escape_string($var);
       }

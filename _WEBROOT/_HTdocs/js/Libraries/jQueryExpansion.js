@@ -36,9 +36,72 @@ jQuery.fn.scrollTo = function(elem, speed = 1000) {
  * To make and element draggable, can specify a handle and a modifier key.
  * @method draggable
  * @param  {jQuery Object}  [handle=this] The handly by which the element can be dragged
- * @param  {String}         [modKey=null]
+ * @param  {String}         [modKey]      Modifier key that needs to be hold in order to enable dragging.
+ * @param  {Object}         [modChanges]  The css properties & values that need to be set when the modkeys are pressed.
  * @return {this}
  */
-jQuery.fn.draggable = function(handle = this, modKey = null) {
+ jQuery.fn.makeDraggable = function(handle = this, modKey = [], modChangeFunc) {
+  const validMods = ['shift', 'ctrl', 'alt', 'meta'];
+  let $handle = $(handle);
+  let iElemZ    = $handle.css('z-index');
 
+  // Execute mod-function when modifier key is down.
+  $(':root').on('keydown', function(e) {
+    if (checkModKey(e) && typeof modChangeFunc === 'function') {
+      modChangeFunc();
+    }
+  });
+
+  // Clicklistener on handle.
+  $(handle).on('mousedown', function(e) {
+    //
+    if (!checkModKey(e)) {
+      return false;
+    }
+
+    $handle.css('z-index', '999');
+
+    // Initial mouse position.
+    let iMouseX = e.pageX;
+    let iMouseY = e.pageY;
+    // Initial element position.
+    let iElemTop  = $handle.offset().top;
+    let iElemLeft = $handle.offset().left;
+
+    // Listen for mousemove, then move the object respectively.
+    $(':root').on('mousemove', function(e) {
+      // Relative mouse position.
+      let rMouseX = e.pageX - iMouseX;
+      let rMouseY = e.pageY - iMouseY;
+
+      // Relative element position.
+      let rElemLeft = rMouseX - iElemLeft;
+      let rElemTop = rMouseY - iElemTop;
+
+      // console.log('Offsets:', rElemTop, rElemLeft);
+
+      $handle.offset({
+        left:rElemLeft,
+         top:rElemTop});
+    }).on('mouseup', function() {
+      console.log('off-mousemove inner', this);
+    });
+  }).on('mouseup', function() {
+    // Remove drag-listener when mousebutton goes up again.
+    $(':root').off('mousemove');
+    $handle.css('z-index', iElemZ);
+    console.log('off-mousemove outer', this);
+  });
+  // end all changes & loops on mouseUp
+
+  function checkModKey(ev) {
+    let valid = true;
+    for (key of modKey) {
+      if (!ev.originalEvent[key + 'Key']) {
+        valid = false;
+      }
+    }
+    return (valid === true);
+  }
+  return this;
 };

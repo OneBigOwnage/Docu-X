@@ -1,5 +1,6 @@
 <?php
   require_once '_Default.php';
+  require_once 'Console.php';
   $page_name = "LOGIN_PAGE";
   $page_title = "Log in to Docu-X";
 

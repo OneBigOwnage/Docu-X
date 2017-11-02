@@ -17,5 +17,7 @@
 
   //By Default we need some Bootstrap and jQuery imports.
   Utils::inclCSS('bootstrap.min', 'fa.min', 'master');
-  Utils::inclJS('./Libraries/jquery-3.2.1', './Libraries/bootstrap.min', './Libraries/jQueryExpansion', 'Utils');
+  Utils::inclJS('./Libraries/jquery-3.2.1', './Libraries/bootstrap.min', './Libraries/jQueryExpansion', './Libraries/bootstrap-notify', 'Utils');
+  // Imports for custom error handling:
+  Utils::inclJS('./eHandling/CustomErrors', './eHandling/Handler');
  ?>

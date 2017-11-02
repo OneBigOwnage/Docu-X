@@ -16,10 +16,9 @@
  */
 function serverRequest(procedure, args, callback, aSync = true, ...cBackArgs) {
   let isSet = !Utils.empty(callback);
-  if (!procedure) {
-    //TODO: throw error.
-    return false;
-  } else if ((isSet && !Utils.isFunc(callback)) || (Utils.empty(callback) && !Utils.empty(cBackArgs))) {
+  eHandler.requiredArguments(procedure);
+
+  if ((isSet && !Utils.isFunc(callback)) || (Utils.empty(callback) && !Utils.empty(cBackArgs))) {
     //TODO: throw error.
     return false;
   }
@@ -41,13 +40,14 @@ function serverRequest(procedure, args, callback, aSync = true, ...cBackArgs) {
           Utils.callFunctionFromString(callback, JSON.parse(rData['responseText'])['responseData'], ...cBackArgs);
         } else {
           // TODO: throw error.
-          console.log("No callback was specified of the response is an invalid JSON. The response is output to console:\n", rData['responseText']);
+          console.log("No callback was specified or the response is an invalid JSON. The response is output to console:\n", rData['responseText']);
         }
       } else {
         console.log("Something went wrong in a serverRequest:");
         console.log('AJAX_status:', rStatus);
         console.log('isJSON:', Utils.isJSON(rData['responseText']));
-        console.log('PHP response boolean:', JSON.parse(rData['responseText'])['successful']);
+        // console.log('PHP response boolean:', JSON.parse(rData['responseText'])['successful']);
+        console.log('Returned value:', rData);
         //TODO: throw error.
       }
     }

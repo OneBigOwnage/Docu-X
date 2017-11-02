@@ -1,2 +1,3 @@
 CREDENTIALS.txt
 _WEBROOT/_gsdata_/*
+_WEBROOT/WebSockets/*

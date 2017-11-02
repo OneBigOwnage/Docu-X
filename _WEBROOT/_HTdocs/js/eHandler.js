@@ -9,10 +9,7 @@ window.addEventListener('error', function(e) {
               'eLine' : e.lineno,
               'eCol'  : e.colno};
 
-  serverRequest('registerJSError', eArr);
+  // serverRequest('registerJSError', eArr);
 });
-
-
-myfunc();
 
 //TODO: Write custom errors & exceptions, and handle them.

@@ -8,7 +8,6 @@ abstract class Console
   public static function log($message)
   {
     $log = new ConsoleLine($message);
-
     $log->save();
   }
 

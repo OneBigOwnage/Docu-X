@@ -34,9 +34,17 @@ class ConsoleLine
 
   public function setScope()
   {
-    $trace = debug_backtrace();
-    $obj = array_pop($stack);
-    return debug_backtrace();
+    $stack = debug_backtrace();
+    $desiredItem;
+    foreach ($stack as $stackItem) {
+      if ($stackItem->class == 'Console' && $stackitem->function == 'log') {
+        $desiredItem = $stackItem;
+      }
+    }
+
+    $info = "$desiredItem->file: $desiredItem->line.";
+
+    return $info;
   }
 
 /*array ( 0 => array ( 'file' => 'C:\\WWW\\_WebRoot\\_PHP\\Error_Handling\\ConsoleLine.php',

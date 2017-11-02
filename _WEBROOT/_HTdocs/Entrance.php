@@ -43,7 +43,6 @@ function console_log($obj)
 
 function console_get_logs()
 {
-  Console::log('Hello World');
   $data = Console::getOpenLogs();
   AJAXReply(true, $data);
 }

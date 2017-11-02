@@ -30,9 +30,7 @@ abstract class errorController {
 
   }
 
-  public static function tempHandler($eLevel, $eMessage, $eFileName, $eLineNr) {
-    echo $eLevel, $eMessage, $eFileName, $eLineNr;
-  }
+  
 
 }
 

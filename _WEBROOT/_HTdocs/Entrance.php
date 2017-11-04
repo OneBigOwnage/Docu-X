@@ -41,7 +41,7 @@ function console_log($obj)
 }
 
 
-function console_get_logs()
+function console_get_logs($obj)
 {
   $data = Console::getOpenLogs();
   AJAXReply(true, $data);
@@ -53,4 +53,5 @@ function console_set_posted($obj)
   $handle = Console::setLogPosted($obj['id'], $obj['posted']);
   AJAXReply(true, $handle);
 }
+
 ?>

@@ -1,5 +1,4 @@
 <?php
-Utils::inclJS('Connect', 'Console');
 Utils::inclCSS('console');
 ?>
 
@@ -15,7 +14,7 @@ Utils::inclCSS('console');
       <input id="console-input-filter" type="text" placeholder="Filter...">
       <button id="console-btn-clear" type="button" class="btn-square"><span class="glyphicon glyphicon-trash"></span></button>
       <button id="console-btn-config" type="button" class="btn-square"><span class="glyphicon glyphicon-cog"></span></button>
-      <button id="console-btn-refresh" type="button" class="btn-square"><span class="glyphicon glyphicon-refresh"></span></button>
+      <button id="console-btn-refresh" type="button" class="btn-square"><span class="glyphicon glyphicon-download-alt"></span></button>
     </div>
   </div>
   <div id="console-window" class="custom-scroll-bar">

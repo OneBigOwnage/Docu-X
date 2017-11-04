@@ -93,7 +93,14 @@ class PHPConsole {
   fetchLines() {
     serverRequest('console_get_logs', null, 'phpConsole.fetchLinesCallback', true, this);
   }
-
+  /**
+   * Fetches unPosted lines from the backend database.
+   * @method fetchLines
+   * @return {void}
+   */
+  fetchLines() {
+    serverRequest('console_get_logs', null, 'phpConsole.fetchLinesCallback', true, this);
+  }
 /**
  * Function only to be used as callback function for the fetchLines function. Will
  * @method fetchLinesCallback
@@ -227,58 +234,9 @@ class PHPConsole {
   }
 }
 //Var instead of let because var is global (=accessable from window).
-var phpConsole = new PHPConsole();
+// var phpConsole = new PHPConsole();
 
 
-/**
- * Creates function for given object, to show/hide it.
- * Call with true (also default to true) to show, call with false to hide.
- * Note: For now only to be used in the console top bar.
- * @method createShowHide
- * @param  {String} w The width to grow to when showing.
- * @param  {Number} s The speed at which to grow when showing.
- * @return {Function} The returned function.
- */
-let createShowHide = function(w, s) {
-  return function() {
-    this.origPadding = this.origPadding || {left:this.css('padding-left'), right:this.css('padding-right')};
-    if (this.is(':hidden')) {
-      let t = this;
-      this.show().animate({ width:w, 'padding-left':this.origPadding.left, 'padding-right':this.origPadding.right}, s).focus();
-    } else if (!this.is(':hidden')) {
-      let t = this;
-      this.animate({width:0, 'padding-left':0, 'padding-right':0}, s, function() {t.hide();});
-    }
-  }
-}
 
-// Listener declaration.
-let $s = $('#console-input-search');
-$s.showMe = createShowHide('200px', 200);
-$('#console-btn-search').on('click', function() {
-  $s.showMe();
-});
-
-let $f = $('#console-input-filter');
-$f.showMe = createShowHide('200px', 200);
-$('#console-btn-filter').on('click', function() {
-  $f.showMe();
-});
-
-$('#console-btn-refresh').on('click', function() {
-  phpConsole.fetchLines();
-});
-
-$('#console-btn-clear').on('click', function() {
-  phpConsole.setLinePosted(true);
-});
-
-$('#console-input-search').on('keyup', function() {
-  phpConsole.search($(this).val());
-});
-
-$('#console-input-filter').on('keyup', function() {
-  phpConsole.filter($(this).val());
-});
 
 // Testing area

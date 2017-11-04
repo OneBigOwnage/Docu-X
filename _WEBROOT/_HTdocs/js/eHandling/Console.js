@@ -1,48 +1,54 @@
-'use strict';
+const consoleInstance = new PHPConsole('#console-window');
 
-class PHPConsole {
-  constructor(window) {
-    this.window = window;
-    this.consoleLines;
-    this.currentFilter;
-    this.currentSearch;
-    this.settings;
+
+$('.console').draggable({
+  handle: '#console-top-bar'
+});
+
+/**
+ * Creates function for given object, to show/hide it.
+ * Call with true (also default to true) to show, call with false to hide.
+ * Note: For now only to be used in the console top bar.
+ * @method createShowHides
+ * @param  {String} w The width to grow to when showing.
+ * @param  {Number} s The speed at which to grow when showing.
+ * @return {Function} The returned function.
+ */
+let createShowHide = function(w, s) {
+  return function() {
+    this.origPadding = this.origPadding || {left:this.css('padding-left'), right:this.css('padding-right')};
+    if (this.is(':hidden')) {
+      let t = this;
+      this.show().animate({ width:w, 'padding-left':this.origPadding.left, 'padding-right':this.origPadding.right}, s).focus();
+    } else if (!this.is(':hidden')) {
+      let t = this;
+      this.animate({width:0, 'padding-left':0, 'padding-right':0}, s, function() {t.hide();});
+    }
   }
-
-  renderView() {}                   // Applies currentFilter & currentSearch.
-                                    // Only responsible for turning this.consoleLines into readable text on page!!
-
-  fetchLines(limit = -1) {}         // Fetches lines from backend
-
-  fetchLinesCallback(cBackData) {}  // Turns data into ConsoleLine Objects.
-                                    // Then calls this.addLines() for the created Objects
-
-  addLines(line) {}                 // Adds line to this.
-                                    // Can be called with array of ConsoleLine Objects,
-                                    //  --> to add all of them (recursively).
-
-  deleteLines(line, del = true) {}  // Removes given line from this.consoleLines
-                                    // Also sends signal to backend, to set line as 'posted'
-                                    // Can be called with array of ConsoleLine Objects,
-                                    //  --> to delete all of them (recursively).
-                                    // Can be called with parameter 'false' to send signal not-'posted' to backend
-                                    //  --> (used with persistency of console in front-end)
-
-  filterLines(fString) {}           // Applies implementation of filtering to each of this.consoleLines.
-                                    // Finally calls this.renderView()
-
-  searchLines(sString) {}           // Applies implementation of searching to each of this.consoleLines.
-                                    // Calls this.renderView()
-                                    // Finally calls this.scrollWindow() with the first found item as parameter.
-                                    // When called with the same parameter as last call
-                                    //  --> will iterate through found items using this.scrollWindow
-
-  scrollWindow(elem) {}             // Scrolls to given Object. Scrolls to given element in this.window.
-                                    // Can be called with parameter 'true' to scroll to end.
-
-  // Implementation of settings (in local storage);
 }
 
-const instance = new phpConsole();
+// Listener declaration.
+let $s = $('#console-input-search');
+$s.showMe = createShowHide('200px', 200);
+$('#console-btn-search').on('click', function() {
+  $s.showMe();
+});
 
-export default instance;
+let $f = $('#console-input-filter');
+$f.showMe = createShowHide('200px', 200);
+$('#console-btn-filter').on('click', function() {
+  $f.showMe();
+});
+
+$('#console-btn-refresh').on('click', function() {
+  consoleInstance.fetchLines();
+});
+
+$('#console-btn-clear').on('click', function() {
+});
+
+$('#console-input-search').on('keyup', function() {
+});
+
+$('#console-input-filter').on('keyup', function() {
+});

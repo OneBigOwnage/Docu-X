@@ -26,6 +26,6 @@ class customError
 
     public function altSave()
     {
-        return true;
+        return false;
     }
 }

@@ -5,9 +5,9 @@
  * with the resulting data as argument.
  *
  * @method serverRequest
- * @param  {String}       procedure    [description]
- * @param  {any}          args         An array containing the
- * @param  {String}       callback     [description]
+ * @param  {String}       procedure    Name of the backend AJAX procedure you want to call.
+ * @param  {any}          args         Arguments to call the procedure with (example: {key1:val1, key3:val4}).
+ * @param  {String}       callback     String representing the callback function.
  * @param  {Boolean}      [aSync=true] Whether or not the AJAX call should be made a-synchronous
  *                                     (use 'undefined' or 'true' if you want to use cBackArgs)
  * @param  {any}          cBackArgs    Extra arguments that will be passed to the callback function.
@@ -19,7 +19,7 @@ function serverRequest(procedure, args, callback, aSync = true, ...cBackArgs) {
   eHandler.requiredArguments(procedure);
 
   if ((isSet && !Utils.isFunc(callback)) || (Utils.empty(callback) && !Utils.empty(cBackArgs))) {
-    //TODO: throw error.
+    throw new Error('Connect arguments are wrong...');
     return false;
   }
 
@@ -28,7 +28,7 @@ function serverRequest(procedure, args, callback, aSync = true, ...cBackArgs) {
     async: aSync,
     data: {
       procedure: procedure,
-      arguments: args
+      arguments: JSON.stringify(args)
     },
     datatype: 'JSON',
     complete: function(rData, rStatus) {

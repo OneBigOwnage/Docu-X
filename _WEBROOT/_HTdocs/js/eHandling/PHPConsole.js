@@ -122,8 +122,7 @@ class PHPConsole {
       win.scrollTo(elem, 200);
     }
 
-  }             // Scrolls to given element in this.window.
-                                    // Can be called with parameter 'true' to scroll to end.
+  }
 
   // Implementation of settings (in local storage);
 

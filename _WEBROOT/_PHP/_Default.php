@@ -20,4 +20,5 @@
   Utils::inclJS('Libraries/jquery-3.2.1', 'Libraries/bootstrap.min', 'Libraries/jQueryExpansion', 'Libraries/bootstrap-notify', 'Utils');
   // Imports for the PHPConsole & custom error handling:
   Utils::inclJS('eHandling/CustomErrors', 'eHandling/Handler', 'eHandling/ConsoleLine','eHandling/PHPConsole', 'eHandling/Console');
+  Utils::inclJS('AJAXUnit/AJAXUnit');
  ?>

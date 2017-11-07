@@ -46,7 +46,9 @@ class PHPConsole {
    * @return {void}              [description]
    */
   fetchLines(limit = -1) {
-    serverRequest('console_get_logs', {limit:limit}, 'PHPConsole.getInstance().fetchLinesCallback');
+    let aj = new AJAXUnit('console_get_logs');
+    aj.setCallback(this.fetchLinesCallback);
+    aj.fire();
   }
 
   /**

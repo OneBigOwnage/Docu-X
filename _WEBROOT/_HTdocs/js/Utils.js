@@ -220,14 +220,13 @@ class Utils {
    * Method to check if function exists in the global context.
    * Returns true if and only if funcName is a callable function in the global context.
    * @method isFunc
-   * @param  {[type]}  funcName The String representing the function to check.
+   * @param  {String}  funcName The String representing the function to check.
    * @return {Boolean}          Returns true if funcName exists in global context.
    */
   static isFunc(funcName) {
     if (Utils.empty(funcName)) {
       return false;
     }
-    funcName = Utils.replaceAll(funcName, ['(', ')'], '');
     return eval(`typeof ${funcName} === 'function';`);
   }
 

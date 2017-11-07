@@ -19,7 +19,6 @@ function AJAXReply($successful, $data) {
 }
 
 
-
 //Procedure declaration area.
 //-------------------------
 

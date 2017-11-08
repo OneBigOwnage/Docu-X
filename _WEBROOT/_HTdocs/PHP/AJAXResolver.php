@@ -52,9 +52,9 @@
 
   function console_get_logs(){AJAXResolver::respond(Console::getOpenLogs());}
 
+  function console_set_logs_posted($logs, $posted){AJAXResolver::respond(Console::setLogsPosted($logs, $posted));}
 
-
-
+  
 
 
 

@@ -34,7 +34,7 @@ class AJAXUnit {
     if (Utils.isFunc(fun)) {
       this.AJAXObject.beforeSend = fun;
     } else {
-      throw new DefaultCustomError("Provided 'BeforeSend' method is not a function!")
+      throw new DefaultCustomError("Provided 'BeforeSend' method is not a function!");
     }
     return this;
   }
@@ -49,9 +49,33 @@ class AJAXUnit {
     return this;
   }
 
-  setArgs(...args) {
-    //TODO: Make sure this is incremental!!
-    this.relayData.arguments = args;
+  /**
+   *  Adds arguments to be used in the function that is called on.
+   *
+   * @method addAruments
+   * @param  {Object}    argumentsObject  The arguments object given in the form of {paramName:paramVal, paramName:paramVal}.
+   * @param  {Boolean}   [replace=false]  Whether or not the given arguments should replace existing arguments with the same name.
+   */
+  addArguments(argumentsObject, replace = true) {
+    let orig = $.extend({}, this.relayData.arguments);
+
+    console.log('Start:');
+    console.log('orig', orig);
+    console.log('argumentsObject', argumentsObject);
+    console.log('this.relayData.arguments', this.relayData.arguments);
+
+    if (replace) {
+      this.relayData.arguments = $.extend(this.relayData.arguments, argumentsObject);
+    } else {
+      this.relayData.arguments = $.extend(this.relayData.arguments, argumentsObject);
+      this.relayData.arguments = $.extend(this.relayData.arguments, orig);
+    }
+
+    console.log('End:');
+    console.log('orig', orig);
+    console.log('argumentsObject', argumentsObject);
+    console.log('this.relayData.arguments', this.relayData.arguments);
+
   }
 
   setCallback(cBackFunction, ...args) {
@@ -111,8 +135,14 @@ class AJAXUnit {
     }
   }
 
+  /**
+   * The default callback for AJAXUnit replies.
+   *
+   * @method defaultCallback
+   * @param  {[type]}        resultObj [description]
+   * @return {[type]}                  [description]
+   */
   static defaultCallback(resultObj) {
     console.log("Default AJAX Callback used, result:", resultObj);
   }
-
 }

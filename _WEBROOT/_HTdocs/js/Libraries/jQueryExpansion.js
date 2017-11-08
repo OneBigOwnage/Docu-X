@@ -6,6 +6,11 @@
  * @return {void}
  */
 jQuery.fn.scrollTo = function(elem, speed = 1000) {
+
+  if (!elem) {
+    return false;
+  }
+
   let $this = $(this);
   let $elem = $(elem);
 
@@ -26,6 +31,8 @@ jQuery.fn.scrollTo = function(elem, speed = 1000) {
   } else {
     newScroll = {scrollTop: elemBottom - thisBottom + $this.scrollTop()};
   }
+
+  // The actual animation of the element.
   $this.animate(newScroll, speed);
 
   // Return this for chaining.

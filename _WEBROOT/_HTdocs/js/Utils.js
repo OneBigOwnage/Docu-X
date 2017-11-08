@@ -241,12 +241,12 @@ class Utils {
    */
   static callFunctionFromString(funcName, ...funcArgs) {
     if (!Utils.isFunc(funcName)) {
-      // TODO: error
+      throw new DefaultCustomError(`'${funcName}' is not a function!`);
       return false;
     } else {
       (eval(`${funcName}`)(...funcArgs));
     }
-    // TODO: Refactor using window[]
+    // TODO: Refactor using window[] (?)
     // Source: https://stackoverflow.com/questions/912596/how-to-turn-a-string-into-a-javascript-function-call
   }
 }

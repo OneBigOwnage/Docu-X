@@ -23,7 +23,8 @@ class PHPConsole {
   /**
    * Reapplies current filter & search, then refreshes the console screen.
    * Done by clearing the screen, and printing all this.consoleLines to it.
-   * Only responsible for turning this.consoleLines into readable text on page!
+   * (Only responsible for turning this.consoleLines into readable text on page!)
+   *
    * @method renderView
    * @return {[type]}   [description]
    */
@@ -59,10 +60,11 @@ class PHPConsole {
    * @return {void}
    */
   fetchLinesCallback(cBackData) {
+    let i = PHPConsole.getInstance();
     for (const lineData of cBackData) {
-      PHPConsole.getInstance().addLines(ConsoleLine.fromJSON(lineData));
+      i.addLines(ConsoleLine.fromJSON(lineData));
     }
-    PHPConsole.getInstance().renderView();
+    i.renderView();
   }
 
   /**
@@ -109,7 +111,7 @@ class PHPConsole {
    */
   scrollWindow(elem = true) {
     let win = PHPConsole.getInstance().screen;
-    if (Utils.empty($('.console-line:last'))) {
+    if ($('.console-line').length <= 0) {
       return false;
     }
 
@@ -119,9 +121,9 @@ class PHPConsole {
     }
 
     if (elem === true) {
-      win.scrollTo($('.console-line:last'));
+      win.scrollTo($('.console-line:last'), 150);
     } else {
-      win.scrollTo(elem, 200);
+      win.scrollTo(elem, 150);
     }
 
   }

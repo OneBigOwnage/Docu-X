@@ -33,23 +33,35 @@ jQuery.fn.scrollTo = function(elem, speed = 1000) {
 };
 
 /**
- * To make and element draggable, can specify a handle and a modifier key.
+ * Function to make an element draggable, can specify a handle and a modifier key.
+ * It is also possible to pass a function that will be called when the modifier key is pressed.
+ *
  * @method draggable
  * @param  {jQuery Object}  [handle=this] The handly by which the element can be dragged
  * @param  {String}         [modKey]      Modifier key that needs to be hold in order to enable dragging.
- * @param  {Object}         [modChanges]  The css properties & values that need to be set when the modkeys are pressed.
  * @return {this}
+ * @param  {Object}         [modChanges]  Function that will be called when the modKey is pressed. Will be called with parameter true for keydown, false for keyup.
  */
  jQuery.fn.makeDraggable = function(handle = this, modKey = [], modChangeFunc) {
   const validMods = ['shift', 'ctrl', 'alt', 'meta'];
+
+  if (typeof modChangeFunc !== 'function') {
+    throw new argumentError();
+  }
+
   let $handle = $(handle);
   let iElemZ    = $handle.css('z-index');
 
   // Execute mod-function when modifier key is down.
   $(':root').on('keydown', function(e) {
     if (checkModKey(e) && typeof modChangeFunc === 'function') {
-      modChangeFunc();
+      modChangeFunc(true);
     }
+  }).on('keyup', function(e) {
+    if (!checkModKey(e)) {
+
+    }
+    modChangeFunc(false);
   });
 
   // Clicklistener on handle.

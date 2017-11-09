@@ -61,8 +61,8 @@ class PHPConsole {
    */
   fetchLinesCallback(cBackData) {
     let i = PHPConsole.getInstance();
-    for (const lineData of cBackData) {
-      i.addLines(ConsoleLine.fromJSON(lineData));
+    for (const lineObj of cBackData) {
+      i.addLines(new ConsoleLine(lineObj.id, lineObj.output_text, lineObj.c_dt));
     }
     i.renderView();
   }
@@ -94,9 +94,27 @@ class PHPConsole {
                                     //  --> to delete all of them (recursively).
                                     // Can be called with 2nd parameter 'false' to send signal not-'posted' to backend
                                     //  --> (used with persistency of console in front-end)
-
-  filterLines(fString = true) {}           // Applies implementation of filtering to each of this.consoleLines.
-                                    // Finally calls this.renderView()
+  /**
+   * Filters each of this.consoleLines and calls this.renderView().
+   *
+   * @param  {String|Boolean} [fString=true] The string to filter on, can be true to reapply last filter
+   * @return {void}
+   */
+  filterLines(fString = true) {
+    let i = PHPConsole.getInstance();
+    if (fString === true && i.currentFilter) {
+      i.filterLines(i.currentFilter);
+    } else {
+      for (let line of i.consoleLines) {
+        if (line.text.indexOf(fString) === -1) {
+          line.setHidden();
+        } else {
+          line.setHidden(false);
+        }
+      }
+    }
+    // TODO: Check to call renderView(), maybe in the else
+  }
 
   searchLines(sString = true) {}           // Applies implementation of searching to each of this.consoleLines.
                                     // Calls this.renderView()

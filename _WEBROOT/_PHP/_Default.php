@@ -1,5 +1,5 @@
 <?php
-  // This file has to be included by every
+  // This file has to be included in every
   // other php file, to manage certain defaults and rules.
   session_start();
   define('SERVER_ROOT', realpath($_SERVER['DOCUMENT_ROOT'].'/../'));
@@ -8,8 +8,8 @@
   require_once 'CONSTANTS.php';
   require_once 'databaseManager.php';
     Database::initConnection();
-  require_once 'Error_Handling/errorController.php';
-    set_error_handler('errorController::handlePHPError');
+  require_once 'Error_Handling/ErrorController.php';
+    ErrorController::init();
   require_once 'sessionManager.php';
     SessionManager::init();
   require_once 'Utils.php';

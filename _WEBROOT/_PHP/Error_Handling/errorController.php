@@ -8,15 +8,14 @@ require_once 'Error_Handling/JSError.php';
 
 
 
-abstract class errorController {
+abstract class ErrorController {
   public static $errors;
 
-
-  public static function getErrors($limit = 100)
+  public static function init()
   {
-
+    register_shutdown_function('ErrorController::shutdownHandler');
+    set_error_handler('ErrorController::handlePHPError');
   }
-
 
   public static function handlePHPError($eLevel, $eMessage, $eFileName, $eLineNr)
   {
@@ -27,10 +26,27 @@ abstract class errorController {
 
   public static function handleJSError()
   {
-
+    //TODO: Errors coming from the front-end should be saved to the database.
   }
 
-  
+  public static function shutdownHandler()
+  {
+    $err = error_get_last();
+    if ($err !== NULL && $err['type'] === E_ERROR) {
+      Console::log(print_r($err, true));
+      self::terminateExecution();
+    }
+  }
+
+
+  public static function terminateExecution($reason)
+  {
+    while (ob_get_status()) {
+      ob_end_clean();
+    }
+    header('localhost/index.php');
+      //TODO: Implement the stop of execution and send the user to some kind of error page.
+  }
 
 }
 

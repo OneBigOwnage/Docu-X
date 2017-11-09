@@ -40,7 +40,8 @@ jQuery.fn.scrollTo = function(elem, speed = 1000) {
 };
 
 /**
- * Function to make an element draggable, can specify a handle and a modifier key.
+ * Function to make an element draggable, can specify a handle.
+ * Also possible to add a modifier key, this is a key()
  * It is also possible to pass a function that will be called when the modifier key is pressed.
  *
  * @method draggable
@@ -61,14 +62,13 @@ jQuery.fn.scrollTo = function(elem, speed = 1000) {
 
   // Execute mod-function when modifier key is down.
   $(':root').on('keydown', function(e) {
-    if (checkModKey(e) && typeof modChangeFunc === 'function') {
+    if (checkModKey(e)) {
       modChangeFunc(true);
     }
   }).on('keyup', function(e) {
     if (!checkModKey(e)) {
-
+      modChangeFunc(false);
     }
-    modChangeFunc(false);
   });
 
   // Clicklistener on handle.
@@ -97,7 +97,6 @@ jQuery.fn.scrollTo = function(elem, speed = 1000) {
       let rElemLeft = rMouseX - iElemLeft;
       let rElemTop = rMouseY - iElemTop;
 
-      // console.log('Offsets:', rElemTop, rElemLeft);
 
       $handle.offset({
         left:rElemLeft,
@@ -105,8 +104,9 @@ jQuery.fn.scrollTo = function(elem, speed = 1000) {
     }).on('mouseup', function() {
       console.log('off-mousemove inner', this);
     });
-  }).on('mouseup', function() {
+
     // Remove drag-listener when mousebutton goes up again.
+  }).on('mouseup', function() {
     $(':root').off('mousemove');
     $handle.css('z-index', iElemZ);
     console.log('off-mousemove outer', this);

@@ -1,9 +1,13 @@
 class ConsoleLine {
   constructor(id, text, time, hidden = false) {
     this.id = id;
-    this.output_text = text;
-    this.c_dt = time;
+    this.text = text;
+    this.time = time;
     this.hidden = hidden;
+  }
+
+  getID() {
+    return this.id;
   }
 
   /**
@@ -17,7 +21,14 @@ class ConsoleLine {
    */
   print(compact = false) {
     let hideString = this.hidden && ' hidden';
-    return `<div class="console-line" line-id="${this.id}"${hideString}>[${Utils.formatDateTime('XX', this.c_dt)}] ${this.output_text}</div>`;
+    let timeString = Utils.formatDateTime('XX', this.time);
+    return `<div class="console-line" line-id="${this.id}"${hideString}>[${timeString}] ${this.text}</div>`;
+  }
+
+
+  insertSearchTags(sString) {
+    this.text = Utils.stripTags(this.text);
+    this.text = Utils.replaceAll(this.text, sString, `<span class="console-find-highlight">${sString}</span>`);
   }
 
   /**
@@ -37,16 +48,5 @@ class ConsoleLine {
    */
   toJSON() {
     return JSON.stringify(this);
-  }
-
-  /**
-   * Returns ConsoleLine Object, built from given jsonString.
-   * @method fromJSON
-   * @param  {[type]} jsonString [description]
-   * @return {Object}
-   */
-  static fromJSON(json) {
-    // TODO: Check if JSON Object or JSON String.
-    return Object.assign(new ConsoleLine, json);
   }
 }

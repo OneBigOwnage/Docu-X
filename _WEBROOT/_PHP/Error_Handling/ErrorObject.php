@@ -8,18 +8,10 @@ abstract class ErrorObject
     return json_encode(get_object_vars($this));
   }
 
-
-  public function printCompressed($html = true)
+  public function print($html = true, $compact = false)
   {
-    # code...
+    
   }
-
-
-  public function printComplete($html = true)
-  {
-    # code...
-  }
-
 }
 
 

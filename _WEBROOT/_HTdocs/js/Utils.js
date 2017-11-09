@@ -249,4 +249,8 @@ class Utils {
     // TODO: Refactor using window[] (?)
     // Source: https://stackoverflow.com/questions/912596/how-to-turn-a-string-into-a-javascript-function-call
   }
+
+  static stripTags(t) {
+    return $(`<p>${t}</p>`).text();
+  }
 }

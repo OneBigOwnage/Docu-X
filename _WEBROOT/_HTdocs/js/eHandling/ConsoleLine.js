@@ -20,7 +20,11 @@ class ConsoleLine {
    * @return {String}
    */
   print(compact = false) {
-    let hideString = this.hidden && ' hidden';
+    let hideString = '';
+    if (this.hidden) {
+      hideString = ' hidden';
+    }
+
     let timeString = Utils.formatDateTime('XX', this.time);
     return `<div class="console-line" line-id="${this.id}"${hideString}>[${timeString}] ${this.text}</div>`;
   }
@@ -29,6 +33,10 @@ class ConsoleLine {
   insertSearchTags(sString) {
     this.text = Utils.stripTags(this.text);
     this.text = Utils.replaceAll(this.text, sString, `<span class="console-find-highlight">${sString}</span>`);
+  }
+
+  removeSearchTags() {
+    this.text = Utils.stripTags(this.text);
   }
 
   /**

@@ -114,7 +114,7 @@ button.btn-square {
   border: 1px solid #2392F4;
 }
 
-#console-window span.find {
+#console-window span.console-find-highlight {
   z-index: -1;
   background-color: #F7EB48;
   border-radius: 4px;

@@ -6,7 +6,6 @@
  * @return {void}
  */
 jQuery.fn.scrollTo = function(elem, speed = 1000) {
-
   if (!elem) {
     return false;
   }

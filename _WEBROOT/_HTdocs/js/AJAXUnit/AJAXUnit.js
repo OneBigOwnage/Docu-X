@@ -31,6 +31,26 @@ class AJAXUnit {
   }
 
   /**
+   * Does a console.log on the current this.AJAXObject. Possible to skip validation.
+   * For debugging purposes.
+   *
+   * @method preview
+   * @param  {Boolean} [preview = false] Whether or not this.AJAXObject should go through validation, defaults to false.
+   * @return {void}
+   */
+  preview(vali = false) {
+    if (vali) {
+      if (AJAXUnit.validate(this)) {
+        this.AJAXObject.data = this.relayData;
+        console.log(this.AJAXObject);
+      }
+    } else {
+      this.AJAXObject.data = this.relayData;
+      console.log(this.AJAXObject);
+    }
+  }
+
+  /**
    * Sets beforeSend function, which will be executed before the sending of the AJAXUnit.
    *
    * @method setBeforeSend
@@ -74,6 +94,7 @@ class AJAXUnit {
     } else {
       relayArgs = $.extend($.extend(relayArgs, argumentsObject), orig);
     }
+    this.relayData.arguments = relayArgs;
   }
 
   /**
@@ -85,10 +106,15 @@ class AJAXUnit {
    * @param {Function} cBackFunction  The function that is to be called when the result comes back.
    * @param {any} args additional arguments that will be passed to the callback funcion.
    */
-  setCallback(cBackFunction, ...args) {
-    this.AJAXObject.complete = function(result, status) {
-      AJAXUnit.callbackWrapper(result, status, cBackFunction, ...args);
+  setCallback(callbackFunction, ...args) {
+    if (typeof callbackFunction === 'function' || callbackFunction === null) {
+      this.AJAXObject.complete = function(result, status) {
+        AJAXUnit.callbackWrapper(result, status, callbackFunction, ...args);
+      }
+    } else {
+      throw new DefaultCustomError(`Failed setting callback function, '${callbackFunction}' is not a function`);
     }
+
     return this;
   }
 
@@ -151,7 +177,7 @@ class AJAXUnit {
 
       if (Object.keys(returnObj)[0] === 'AJAX_TERMINATED' && returnObj['AJAX_TERMINATED'] === true) {
         throw new DefaultCustomError(`AJAXUnit result came back terminated! Reason: ${returnObj.reason}`);
-      } else {
+      } else if (callbackFunction !== null) {
         callbackFunction(returnObj, ...callbackArguments);
       }
     }

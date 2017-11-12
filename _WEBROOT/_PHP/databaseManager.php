@@ -82,7 +82,7 @@
           return self::execQuery($statement);
       }
 
-      public static function update($table, $data, $where)
+      public static function update($table, $data, $where = NULL)
       {
           if (empty($table) || empty($data)) {
               return false;

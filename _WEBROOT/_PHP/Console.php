@@ -5,7 +5,7 @@ Utils::inclCSS('console');
 <div class="console draggable">
   <div id="console-top-bar">
     <div id="console-title">
-      Console
+      PHP-Console
     </div>
     <div id="console-btn-container">
       <button id="console-btn-search" type="button" class="btn-square"><span class="glyphicon glyphicon-search"></span></button>

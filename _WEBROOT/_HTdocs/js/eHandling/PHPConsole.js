@@ -26,27 +26,27 @@ class PHPConsole {
    * (Only responsible for turning this.consoleLines into readable text on page!)
    *
    * @method renderView
-   * @return {[type]}   [description]
+   * @return {void}   [description]
    */
   renderView() {
     const i = PHPConsole.getInstance();
-    i.screen.html(`<div style="margin-bottom:auto;"></div>`);
 
-    i.searchLines();
-    i.filterLines();
+    // Next line is required for spacing, this way the lines start at the bottom.
+    i.screen.html(`<div style="margin-bottom:auto;"></div>`);
 
     for (const line of i.consoleLines) {
       i.screen.append(line.print());
     }
+
+    i.scrollWindow();
   }
 
   /**
-   * Fetches console lines from backend. Possibility to specify a limit.
+   * Fetches console lines from backend.
    * @method fetchLines
-   * @param  {Number}   [limit=-1] The limit for getting lines (-1 for no limit), defaults to -1
-   * @return {void}              [description]
+   * @return {void}
    */
-  fetchLines(limit = -1) {
+  fetchLines() {
     let aj = new AJAXUnit('console_get_logs');
     aj.setCallback(this.fetchLinesCallback);
     aj.fire();
@@ -54,16 +54,26 @@ class PHPConsole {
 
   /**
    * Turns fetched data into ConsoleLine Objects.
-   * Then calls this.addLines() for the created Objects
+   * Then calls this.addLines() for the created Objects.
+   * When the adding is finished, will redo the current search & filtering. Then call this.renderView().
+   *
    * @method fetchLinesCallback
    * @param  {Object}           cBackData Returned data, fetched with this.fetchLines
    * @return {void}
    */
   fetchLinesCallback(cBackData) {
+    if (cBackData.hasOwnProperty('result')) {
+      return false;
+    }
+
     let i = PHPConsole.getInstance();
     for (const lineObj of cBackData) {
       i.addLines(new ConsoleLine(lineObj.id, lineObj.output_text, lineObj.c_dt));
     }
+
+    // FIXME: Check if searchLines/filterLines goes right;
+    i.searchLines();
+    i.filterLines();
     i.renderView();
   }
 
@@ -87,13 +97,54 @@ class PHPConsole {
     }
   }
 
+  /**
+   * Removes given line from this.consoleLines, and sends signal to backend to set flag posted.
+   * Can be used with single ConsoleLine objects, or Array of objects.
+   * Call with parameter true to delete all this.consoleLines.
+   *
+   * @method deleteLines
+   * @param  {Object<ConsoleLine>|Array<Object>|Boolean}   [line=true] Consoleline, Array of ConsoleLines or  boolean true to delete all.
+   * @param  {Boolean}   [del=true]
+   * @return {void}
+   */
+  deleteLines(line = true, del = true) {
+    let i = PHPConsole.getInstance();
 
-  deleteLines(line, del = true) {}  // Removes given line from this.consoleLines
-                                    // Also sends signal to backend, to set line as 'posted'
-                                    // Can be called with array of ConsoleLine Objects,
-                                    //  --> to delete all of them (recursively).
-                                    // Can be called with 2nd parameter 'false' to send signal not-'posted' to backend
-                                    //  --> (used with persistency of console in front-end)
+    if (line === true) {
+      i.consoleLines = [];
+      i.renderView();
+
+      let aj = new AJAXUnit('console_set_logs_posted');
+      aj.setCallback(null);
+      aj.addArguments({ id:true, posted:true});
+      aj.fire();
+
+    } else if (Array.isArray(line)) {
+      let deletedArray = [];
+      let listClone = [...i.consoleLines];
+
+      for (let l of listClone) {
+        i.consoleLines.splice(i.consoleLines.indexOf(l), 1);
+        deletedArray.push(l.getID());
+      }
+
+      i.renderView();
+
+      let aj = new AJAXUnit('console_set_logs_posted');
+      aj.addArguments({ id:deletedArray, posted:del});
+      aj.setCallback(null);
+      aj.fire();
+    } else if (i.consoleLines.indexOf(line) !== -1) {
+      i.consoleLines.splice(i.consoleLines.indexOf(line), 1);
+      i.renderView();
+
+      let aj = new AJAXUnit('console_set_logs_posted');
+      aj.addArguments({id:line.getID(), posted:del});
+      aj.setCallback(null);
+      aj.fire();
+    }
+  }
+
   /**
    * Filters each of this.consoleLines and calls this.renderView().
    *
@@ -102,25 +153,53 @@ class PHPConsole {
    */
   filterLines(fString = true) {
     let i = PHPConsole.getInstance();
+
     if (fString === true && i.currentFilter) {
+
       i.filterLines(i.currentFilter);
-    } else {
+
+    } else if (typeof fString === 'string') {
+
+      i.currentFilter = fString;
+
       for (let line of i.consoleLines) {
-        if (line.text.indexOf(fString) === -1) {
+
+        if (line.text.toUpperCase().indexOf(fString.toUpperCase()) === -1) {
           line.setHidden();
         } else {
           line.setHidden(false);
         }
+
+      }
+
+    }
+  }
+  /**
+   * Searches through each of this.consoleLines, adding & removing found-tags on its way. if
+   *
+   * @method searchLines
+   * @param  {Boolean}   [sString=true] [description]
+   * @return {[type]}                   [description]
+   */
+  searchLines(sString = true) {
+    let i = PHPConsole.getInstance();
+
+    if (sString === true && i.currentSearch) {
+      i.searchLines(i.currentSearch);
+    } else if (sString === i.currentSearch) {
+      // TODO: implement scroll-to-next found.
+    } else if (typeof sString === 'string') {
+      i.currentSearch = sString;
+      for (let line of i.consoleLines) {
+        if (line.text.indexOf(sString) !== -1) {
+          line.insertSearchTags(sString);
+        } else {
+          line.removeSearchTags();
+        }
       }
     }
-    // TODO: Check to call renderView(), maybe in the else
   }
 
-  searchLines(sString = true) {}           // Applies implementation of searching to each of this.consoleLines.
-                                    // Calls this.renderView()
-                                    // Finally calls this.scrollWindow() with the first found item as parameter.
-                                    // When called with the same parameter as last call
-                                    //  --> will iterate through found items using this.scrollWindow
   /**
    * Scrolls console window to given element. Call with parameter true to scroll to the end.
    *
@@ -145,9 +224,6 @@ class PHPConsole {
     }
 
   }
-
-  // Implementation of settings (in local storage);
-
 
   /**
    * Helps with the singleton-ness of PHPConsole.

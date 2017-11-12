@@ -45,10 +45,17 @@ $('#console-btn-refresh').on('click', function() {
 });
 
 $('#console-btn-clear').on('click', function() {
+  consoleInstance.deleteLines();
 });
 
 $('#console-input-search').on('keyup', function() {
+  let t = $('#console-input-search').val();
+    consoleInstance.searchLines(t);
+    consoleInstance.renderView();
 });
 
 $('#console-input-filter').on('keyup', function() {
+  let t = $('#console-input-filter').val();
+    consoleInstance.filterLines(t);
+    consoleInstance.renderView();
 });

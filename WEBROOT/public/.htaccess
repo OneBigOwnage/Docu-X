@@ -1,0 +1,14 @@
+RewriteEngine On
+
+
+#Make sure .js and .css files are still accessible.
+#Possible to add more filetypes, add them between the parenthesis separated by pipes.
+RewriteCond %{REQUEST_URI} !\.(css|js)$
+
+#Make sure actual file requests do not get rewritten. --> I don't think this is needed with the above rule?
+#RewriteCond %{REQUEST_FILENAME} !-f
+#RewriteCond %{REQUEST_FILENAME} !-l
+#RewriteCond %{REQUEST_FILENAME} !-d
+
+#The actual rewrite rule to have index.php as entry point, with url as parameter to index.php.
+RewriteRule ^([^/]+)/? index.php?url=$1 [L,QSA]

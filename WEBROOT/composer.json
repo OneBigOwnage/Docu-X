@@ -1,0 +1,15 @@
+{
+    "name": "niekv/docux",
+    "authors": [
+        {
+            "name": "OneBigOwnage",
+            "email": "development.niekvandenbos@gmail.com"
+        }
+    ],
+    "autoload": {
+      "psr-4": {
+        "DocuX\\Core\\" : "src/",
+        "DocuX\\App\\"  : "src/"
+      }
+    }
+}
